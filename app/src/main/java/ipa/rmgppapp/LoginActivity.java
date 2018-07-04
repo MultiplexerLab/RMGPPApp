@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,12 +13,13 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
+
     public void cancelProcess(View view) {
         finish();
     }
 
-    public void proceedProcess(View view) {
-        Intent intent = new Intent(this, Dashboard.class);
+    public void continueProcess(View view) {
+        Intent intent = new Intent(this, DashboardActivity.class);
         startActivity(intent);
     }
 }

@@ -1,49 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".LoginActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="HOURLY PRODUCTIVITY APP"
-        android:gravity="center"
         android:layout_margin="20dp"
-        android:textStyle="bold"
+        android:gravity="center"
+        android:text="HOURLY PRODUCTIVITY APP"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#32808a"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:textStyle="bold" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Supervisor ID"/>
+        android:inputType="number"
+        android:hint="Supervisor ID" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Style No/ID"/>
+        android:hint="Style No/ID" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:orientation="horizontal">
+
         <Button
-            android:id="@+id/buttonCancel"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:layout_weight="0.5"
+            android:text="Extra"
+            android:visibility="gone" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Exit"
             android:onClick="cancelProcess"/>
+
         <Button
-            android:id="@+id/buttonDone"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:onClick="proceedProcess"/>
+            android:layout_weight="0.5"
+            android:text="Continue"
+            android:onClick="continueProcess"/>
     </LinearLayout>
+
 </LinearLayout>

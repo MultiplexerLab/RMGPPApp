@@ -3,7 +3,7 @@ package ipa.rmgppapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Dashboard extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
