@@ -14,14 +14,14 @@
         android:gravity="center"
         android:text="HOURLY PRODUCTIVITY APP"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#32808a"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Supervisor ID" />
+        android:hint="Supervisor ID"
+        android:inputType="number" />
 
     <EditText
         android:layout_width="match_parent"
@@ -43,16 +43,24 @@
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
             android:layout_weight="0.5"
+            android:background="@color/redButton"
+            android:onClick="cancelProcess"
             android:text="Exit"
-            android:onClick="cancelProcess"/>
+            android:textColor="@color/textColor" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
             android:layout_weight="0.5"
+            android:background="@color/colorPrimary"
+            android:onClick="continueProcess"
             android:text="Continue"
-            android:onClick="continueProcess"/>
+            android:textColor="@color/textColor" />
     </LinearLayout>
 
 </LinearLayout>

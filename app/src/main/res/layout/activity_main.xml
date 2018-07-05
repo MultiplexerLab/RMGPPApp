@@ -9,8 +9,12 @@
         android:id="@+id/buttonLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter The App"
+        android:text="ENTER THE APP"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:padding="20dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/textColor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:onClick="checkPermission"/>
 </RelativeLayout>
