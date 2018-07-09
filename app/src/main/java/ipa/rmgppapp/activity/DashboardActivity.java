@@ -1,10 +1,14 @@
-package ipa.rmgppapp;
+package ipa.rmgppapp.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+
+import ipa.rmgppapp.R;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -33,5 +37,19 @@ public class DashboardActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void newReport(View view) {
+        Intent intent = new Intent(DashboardActivity.this, ReportActivity.class);
+        startActivity(intent);
+    }
+
+    public void savedReport(View view) {
+        Intent intent = new Intent(DashboardActivity.this, SavedReportActivity.class);
+        startActivity(intent);
+    }
+
+    public void cancelDashboard(View view) {
+        finish();
     }
 }

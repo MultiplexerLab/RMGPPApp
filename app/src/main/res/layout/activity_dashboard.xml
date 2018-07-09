@@ -9,8 +9,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:padding="5dp"
+        android:onClick="newReport"
         android:text="Insert New Report"
         android:textColor="@color/textColor" />
 
@@ -21,8 +22,9 @@
         android:layout_below="@id/buttonNewReport"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:padding="5dp"
+        android:onClick="savedReport"
         android:text="View Saved Report"
         android:textColor="@color/textColor" />
 
@@ -30,10 +32,11 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonSaveReport"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="209dp"
         android:background="@color/redButton"
+        android:onClick="cancelDashboard"
         android:text="Back"
         android:textColor="@color/textColor" />
 
@@ -41,12 +44,11 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonSaveReport"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="30dp"
-        android:layout_toRightOf="@id/button2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="177dp"
         android:background="@color/colorPrimary"
+        android:onClick="newReport"
         android:padding="5dp"
         android:text="Continue with this Unsaved One"
         android:textColor="@color/textColor" />
