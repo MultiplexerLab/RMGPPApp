@@ -21,21 +21,21 @@
         android:layout_alignBaseline="@+id/editText2"
         android:layout_alignStart="@+id/textView"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="Line Target Total" />
+        android:text="Line Targe Total" />
 
     <TextView
         android:id="@+id/editText2"
-        android:layout_width="225dp"
+        android:layout_width="205dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="18dp"
         android:layout_marginTop="56dp"
+        android:inputType="textPersonName"
         android:text="10000"
-        android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary"
-        android:inputType="textPersonName" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView3"
