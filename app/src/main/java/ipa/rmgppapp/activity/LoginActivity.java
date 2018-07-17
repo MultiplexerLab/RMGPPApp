@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void continueProcess(View view) {
-        Intent intent = new Intent(this, DashboardActivity.class);
+        Intent intent = new Intent(this, ReportActivity.class);
         startActivity(intent);
     }
 }

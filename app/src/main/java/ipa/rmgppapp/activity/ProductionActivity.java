@@ -27,9 +27,9 @@ public class ProductionActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPagerProfile);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragments(new HourlyProductionFragment(), "Individual Entry");
+        adapter.addFragments(new InputOutputFragment(), "Line\nEntry");
         adapter.addFragments(new HourlyReportFragment(), "Hourly Report");
-        adapter.addFragments(new HourlyProductionFragment(), "Hourly Entry");
-        adapter.addFragments(new InputOutputFragment(), "Input or Output");
         adapter.addFragments(new FullDaySummery(), "Full Day Summery");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

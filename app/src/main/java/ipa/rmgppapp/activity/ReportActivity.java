@@ -21,6 +21,7 @@ public class ReportActivity extends AppCompatActivity {
     private static final String[][] DATA_TO_SHOW = { { "1", "OVS", "OVS123", "PO123" , "10000", "10 August, 2018", "Cutting complete"},
             { "2", "SICEM", "OVS124", "PO124" , "20000", "30 August, 2018", "Cutting complete"},
             { "3", "Li&Fung", "Li123", "PO222" , "50000", "30 September, 2018", "Markers Done"}};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -27,6 +27,7 @@
             android:background="@color/colorPrimary"
             android:textColor="@color/textColor"
             android:onClick="addStyle"
+            android:visibility="gone"
             android:text="Add New Style" />
     </LinearLayout>
 
