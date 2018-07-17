@@ -18,12 +18,14 @@
         android:textStyle="bold" />
 
     <EditText
+        android:id="@+id/editTextSuperVisorId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Supervisor ID"
-        android:inputType="number" />
+        android:inputType="text" />
 
     <EditText
+        android:id="@+id/editTextStyleId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Style No/ID" />

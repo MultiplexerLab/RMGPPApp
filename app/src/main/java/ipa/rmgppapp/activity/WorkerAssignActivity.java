@@ -26,12 +26,12 @@ public class WorkerAssignActivity extends AppCompatActivity {
         listViewProcess = findViewById(R.id.listViewProcess);
         processItemArrayList = new ArrayList<>();
         setData();
-        adapter = new WorkerAssignAdapter(processItemArrayList, this);
+        adapter = new WorkerAssignAdapter(this, processItemArrayList);
         listViewProcess.setAdapter(adapter);
     }
 
     private void setData() {
-        processItemArrayList.add(new ProcessItem("Process\nName", "Machine\nType", "Hourly\nTarget", "Assigned\nWorker Id" ));
+        //processItemArrayList.add(new ProcessItem("Process\nName", "Machine\nType", "Hourly\nTarget", "Assigned\nWorker Id" ));
         processItemArrayList.add(new ProcessItem("Side Join", "Plain Machine", "100", "" ));
         processItemArrayList.add(new ProcessItem("Neck Join", "Fade Lock", "100", "" ));
         processItemArrayList.add(new ProcessItem("Side Join", "Plain Machine", "100", "" ));

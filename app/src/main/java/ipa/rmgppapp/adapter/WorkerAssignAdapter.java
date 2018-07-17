@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.model.ProcessItem;
 
-public class WorkerAssignAdapter extends BaseAdapter {
+public class WorkerAssignAdapter extends BaseAdapter{
 
-    ArrayList<ProcessItem> processItemArrayList;
     Context context;
+    ArrayList<ProcessItem> processItemArrayList;
 
-    public WorkerAssignAdapter(ArrayList<ProcessItem> processItemArrayList, Context context) {
-        this.processItemArrayList = processItemArrayList;
+    public WorkerAssignAdapter(Context context, ArrayList<ProcessItem> processItemArrayList) {
         this.context = context;
+        this.processItemArrayList = processItemArrayList;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class WorkerAssignAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return processItemArrayList.get(i);
+        return null;
     }
 
     @Override
@@ -41,23 +41,20 @@ public class WorkerAssignAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
 
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = layoutInflater.inflate(R.layout.worker_assign_custom_layout, null);
-        TextView processName = customView.findViewById(R.id.processName);
-        TextView machineType = customView.findViewById(R.id.machineType);
-        TextView hourlyTarget = customView.findViewById(R.id.hourlyTarget);
-        EditText workerId = customView.findViewById(R.id.workerId);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View custom_view = inflater.inflate(R.layout.worker_assign_custom_layout, null);
+
+        TextView processName, machineType, hourlyTarget;
+        EditText workerId;
+        processName = custom_view.findViewById(R.id.processName);
+        machineType = custom_view.findViewById(R.id.machineType);
+        hourlyTarget = custom_view.findViewById(R.id.hourlyTarget);
+        workerId = custom_view.findViewById(R.id.workerId);
 
         processName.setText(processItemArrayList.get(position).getProcessName());
         machineType.setText(processItemArrayList.get(position).getMachineType());
         hourlyTarget.setText(processItemArrayList.get(position).getHourlyTarget());
-        if(position==0)
-        {
-            workerId.setEnabled(false);
-            workerId.setText(processItemArrayList.get(0).getAssignedWorkerId());
-        }
 
-
-        return customView;
+        return custom_view;
     }
 }

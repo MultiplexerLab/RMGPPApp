@@ -9,26 +9,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="6"
             android:layout_height="match_parent"
-            android:text="Most Recent: "
+            android:layout_weight="6"
             android:gravity="bottom"
+            android:text="Most Recent: "
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
+
         <Button
             android:layout_width="0dp"
-            android:layout_weight="4"
             android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:background="@color/colorPrimary"
-            android:textColor="@color/textColor"
             android:onClick="addStyle"
-            android:visibility="gone"
-            android:text="Add New Style" />
+            android:text="Add New Style"
+            android:textColor="@color/textColor"
+            android:visibility="gone" />
     </LinearLayout>
 
     <HorizontalScrollView
@@ -36,8 +38,8 @@
         android:layout_height="200dp">
         <de.codecrafters.tableview.TableView
             xmlns:table="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/tableView"
-            android:layout_width="650dp"
+            android:id="@+id/tableViewReport"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
             table:tableView_columnCount="7" />
     </HorizontalScrollView>
