@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.listeners.OnScrollListener;
+import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
@@ -46,8 +48,17 @@ public class ReportActivity extends AppCompatActivity {
 
         tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(this, TABLE_HEADERS));
         tableView.setDataAdapter(new SimpleTableDataAdapter(this, DATA_TO_SHOW));
+
+        tableView.addDataClickListener(new DataClickListener());
     }
 
+    private class DataClickListener implements TableDataClickListener<String> {
+        @Override
+        public void onDataClicked(int rowIndex, String data) {
+            String clickedCarString = data;
+            Toast.makeText(ReportActivity.this, clickedCarString, Toast.LENGTH_SHORT).show();
+        }
+    }
     public void addStyle(View view) {
         Intent intent = new Intent(this, AddNewStyle.class);
         startActivity(intent);

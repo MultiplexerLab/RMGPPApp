@@ -8,9 +8,9 @@ import android.os.Bundle;
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.adapter.ViewPagerAdapter;
 import ipa.rmgppapp.fragment.FullDaySummery;
-import ipa.rmgppapp.fragment.HourlyProductionFragment;
+import ipa.rmgppapp.fragment.IndividualEntryFragment;
 import ipa.rmgppapp.fragment.HourlyReportFragment;
-import ipa.rmgppapp.fragment.InputOutputFragment;
+import ipa.rmgppapp.fragment.LineEntryFragment;
 
 public class ProductionActivity extends AppCompatActivity {
 
@@ -27,10 +27,12 @@ public class ProductionActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPagerProfile);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragments(new HourlyProductionFragment(), "Individual Entry");
-        adapter.addFragments(new InputOutputFragment(), "Line\nEntry");
+
+        adapter.addFragments(new IndividualEntryFragment(), "Individual Entry");
+        adapter.addFragments(new LineEntryFragment(), "Line\nEntry");
         adapter.addFragments(new HourlyReportFragment(), "Hourly Report");
         adapter.addFragments(new FullDaySummery(), "Full Day Summery");
+
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }

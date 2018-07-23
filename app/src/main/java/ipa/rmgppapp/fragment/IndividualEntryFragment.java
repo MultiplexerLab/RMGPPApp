@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 
 import ipa.rmgppapp.R;
 
-public class HourlyProductionFragment extends Fragment {
+public class IndividualEntryFragment extends Fragment {
 
-    public HourlyProductionFragment(){
+    public IndividualEntryFragment(){
 
     }
 

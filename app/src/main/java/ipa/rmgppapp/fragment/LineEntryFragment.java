@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 
 import ipa.rmgppapp.R;
 
-public class InputOutputFragment extends Fragment {
+public class LineEntryFragment extends Fragment {
 
-    public InputOutputFragment(){
+    public LineEntryFragment(){
 
     }
     @Override
