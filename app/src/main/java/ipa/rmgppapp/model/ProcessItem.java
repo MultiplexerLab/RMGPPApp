@@ -4,10 +4,11 @@ public class ProcessItem {
 
     private String processName;
     private String machineType;
-    private String hourlyTarget;
+    private Double hourlyTarget;
     private String assignedWorkerId;
+    private String assignedWorkerName;
 
-    public ProcessItem(String processName, String machineType, String hourlyTarget, String assignedWorkerId) {
+    public ProcessItem(String processName, String machineType, Double hourlyTarget, String assignedWorkerId) {
         this.processName = processName;
         this.machineType = machineType;
         this.hourlyTarget = hourlyTarget;
@@ -30,11 +31,11 @@ public class ProcessItem {
         this.machineType = machineType;
     }
 
-    public String getHourlyTarget() {
-        return hourlyTarget;
+    public Double getHourlyTarget() {
+        return Double.valueOf(Math.round(hourlyTarget));
     }
 
-    public void setHourlyTarget(String hourlyTarget) {
+    public void setHourlyTarget(Double hourlyTarget) {
         this.hourlyTarget = hourlyTarget;
     }
 
@@ -44,5 +45,13 @@ public class ProcessItem {
 
     public void setAssignedWorkerId(String assignedWorkerId) {
         this.assignedWorkerId = assignedWorkerId;
+    }
+
+    public String getAssignedWorkerName() {
+        return assignedWorkerName;
+    }
+
+    public void setAssignedWorkerName(String assignedWorkerName) {
+        this.assignedWorkerName = assignedWorkerName;
     }
 }

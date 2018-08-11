@@ -5,38 +5,45 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <EditText
+
+    <Spinner
+        android:id="@+id/spinnerTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Working Hour" />
 
     <EditText
+        android:id="@+id/editTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Input" />
 
     <EditText
+        android:id="@+id/editTextOutput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Line output" />
 
     <EditText
+        android:id="@+id/editTextProblemType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Problem Type" />
 
     <EditText
+        android:id="@+id/editTextStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Status" />
 
     <Button
+        android:id="@+id/saveHourlyEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="@color/colorPrimary"
-        android:textColor="@color/textColor"
-        android:layout_gravity="center"/>
+        android:text="Save"
+        android:textColor="@color/textColor" />
 
 </LinearLayout>

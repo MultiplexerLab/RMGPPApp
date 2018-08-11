@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ipa.rmgppapp">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,15 +24,20 @@
         <activity
             android:name=".activity.DashboardActivity"
             android:label="Dashboard" />
-        <activity android:name=".activity.ReportActivity"
-            android:label="Report"/>
-        <activity android:name=".activity.AddNewStyle"
-            android:label="Add New Style"/>
-        <activity android:name=".activity.SavedReportActivity"
-            android:label="Saved Report"/>
-        <activity android:name=".activity.WorkerAssignActivity"
-            android:label="Assign Workers"/>
-        <activity android:name=".activity.ProductionActivity"
+        <activity
+            android:name=".activity.ReportActivity"
+            android:label="Report" />
+        <activity
+            android:name=".activity.AddNewStyle"
+            android:label="Add New Style" />
+        <activity
+            android:name=".activity.SavedReportActivity"
+            android:label="Saved Report" />
+        <activity
+            android:name=".activity.WorkerAssignActivity"
+            android:label="Assign Workers" />
+        <activity
+            android:name=".activity.ProductionActivity"
             android:label="Production Report"></activity>
     </application>
 
