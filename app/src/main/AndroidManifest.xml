@@ -38,7 +38,8 @@
             android:label="Assign Workers" />
         <activity
             android:name=".activity.ProductionActivity"
-            android:label="Production Report"></activity>
+            android:label="Production Report"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

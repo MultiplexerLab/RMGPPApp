@@ -38,7 +38,7 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
 
     private ArrayList<ProcessItem> processItems;
     Context context;
-    String times[] = {"8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm"};
+    String times[] = {"9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm"};
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView workerId, workerName, processName;

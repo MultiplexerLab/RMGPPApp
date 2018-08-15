@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,7 +31,7 @@ public class IndividualEntryFragment extends Fragment {
 
     RecyclerView mRecyclerView;
 
-    public IndividualEntryFragment(){
+    public IndividualEntryFragment() {
     }
 
     @Override
@@ -38,18 +39,23 @@ public class IndividualEntryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View customView = inflater.inflate(R.layout.fragment_hourly_production, container, false);
 
-        LinearLayoutManager layoutManager= new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(layoutManager);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("hourlyEntry", MODE_PRIVATE);
         String data = sharedPreferences.getString("data", "");
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<ProcessItem>>(){}.getType();
-        ArrayList<ProcessItem> processItems = gson.fromJson(data, type);
-        IndividualEntryAdapter adapter = new IndividualEntryAdapter(getActivity(), processItems);
-        mRecyclerView.setAdapter(adapter);
 
+        if (data.isEmpty()) {
+            Toast.makeText(getActivity(), "Assign Workers first!", Toast.LENGTH_SHORT).show();
+        } else {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<ProcessItem>>() {
+            }.getType();
+            ArrayList<ProcessItem> processItems = gson.fromJson(data, type);
+            IndividualEntryAdapter adapter = new IndividualEntryAdapter(getActivity(), processItems);
+            mRecyclerView.setAdapter(adapter);
+        }
         return customView;
     }
 }

@@ -132,6 +132,5 @@ public class WorkerAssignActivity extends AppCompatActivity {
 
     public void continueWorkerAssign(View view) {
         adapter.saveData();
-
     }
 }

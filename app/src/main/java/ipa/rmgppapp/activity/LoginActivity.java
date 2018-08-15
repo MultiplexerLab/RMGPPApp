@@ -24,12 +24,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.helper.Endpoints;
@@ -113,14 +118,41 @@ public class LoginActivity extends AppCompatActivity {
         if (error) {
             Toast.makeText(this, "Insert all valid information", Toast.LENGTH_LONG).show();
         } else {
-            SharedPreferences.Editor editor = getSharedPreferences("supervisor", MODE_PRIVATE).edit();
-            editor.putString("supervisorId", supervisorId);
-            editor.putString("lineNo", lineNo);
-            editor.commit();
-
-            Intent intent = new Intent(this, ReportActivity.class);
-            startActivity(intent);
+            if (internetConnected()) {
+                checkValidSupervisor(supervisorId, lineNo);
+            }
         }
+    }
+
+    private void checkValidSupervisor(final String supervisorId, final String lineNo) {
+        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.CHECK_SUPERVISOR_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.contains("SUCCESS")) {
+                    SharedPreferences.Editor editor = getSharedPreferences("supervisor", MODE_PRIVATE).edit();
+                    editor.putString("supervisorId", supervisorId);
+                    editor.putString("lineNo", lineNo);
+                    editor.commit();
+
+                    Intent intent = new Intent(LoginActivity.this, ReportActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("CheckSuperVisor", error.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("superVisorId", supervisorId);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
     }
 
     private boolean internetConnected() {

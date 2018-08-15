@@ -1,9 +1,13 @@
 package ipa.rmgppapp.activity;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.adapter.ViewPagerAdapter;
@@ -17,6 +21,8 @@ public class ProductionActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     ViewPagerAdapter adapter;
+    Toolbar toolbar;
+    Button buttonJumpWorkerAssign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,9 @@ public class ProductionActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tabLayoutProfile);
         viewPager = findViewById(R.id.viewPagerProfile);
+        toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
+        buttonJumpWorkerAssign = findViewById(R.id.buttonJumpWorkerAssign);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -35,5 +44,13 @@ public class ProductionActivity extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        buttonJumpWorkerAssign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProductionActivity.this, WorkerAssignActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

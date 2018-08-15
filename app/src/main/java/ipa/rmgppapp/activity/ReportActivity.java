@@ -114,10 +114,8 @@ public class ReportActivity extends AppCompatActivity {
         tableView.addDataClickListener(new TableDataClickListener() {
             @Override
             public void onDataClicked(int rowIndex, Object clickedData) {
-
                 tableView.getDataAdapter().getView(rowIndex, null, null).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 //tableView.getDataAdapter().getCellView(rowIndex, 1, tableView).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-
                 String description = planningData.get(rowIndex).getDescription();
                 String temp[] = description.split(" ");
                 SharedPreferences.Editor editor = getSharedPreferences("supervisor", MODE_PRIVATE).edit();
@@ -141,7 +139,13 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     public void continueReport(View view) {
-        Intent intent = new Intent(ReportActivity.this, WorkerAssignActivity.class);
-        startActivity(intent);
+        SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
+        String description = sharedPreferences.getString("description", "");
+        if (description.isEmpty()) {
+            Toast.makeText(this, "You have to choose a style!", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(ReportActivity.this, ProductionActivity.class);
+            startActivity(intent);
+        }
     }
 }
