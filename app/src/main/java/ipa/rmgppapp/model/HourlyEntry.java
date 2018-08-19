@@ -5,17 +5,15 @@ public class HourlyEntry {
     private String workerId;
     private String workerName;
     private String processName;
-    private String cuttingSlStart;
-    private String cuttingSlEnd;
+    /*private String cuttingSlStart;
+    private String cuttingSlEnd;*/
     private int quantity;
 
-    public HourlyEntry(String timeStamp, String workerId, String workerName, String processName, String cuttingSlStart, String cuttingSlEnd, int quantity) {
+    public HourlyEntry(String timeStamp, String workerId, String workerName, String processName, int quantity) {
         this.timeStamp = timeStamp;
         this.workerId = workerId;
         this.workerName = workerName;
         this.processName = processName;
-        this.cuttingSlStart = cuttingSlStart;
-        this.cuttingSlEnd = cuttingSlEnd;
         this.quantity = quantity;
     }
 
@@ -49,22 +47,6 @@ public class HourlyEntry {
 
     public void setProcessName(String processName) {
         this.processName = processName;
-    }
-
-    public String getCuttingSlStart() {
-        return cuttingSlStart;
-    }
-
-    public void setCuttingSlStart(String cuttingSlStart) {
-        this.cuttingSlStart = cuttingSlStart;
-    }
-
-    public String getCuttingSlEnd() {
-        return cuttingSlEnd;
-    }
-
-    public void setCuttingSlEnd(String cuttingSlEnd) {
-        this.cuttingSlEnd = cuttingSlEnd;
     }
 
     public int getQuantity() {

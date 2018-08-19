@@ -42,7 +42,7 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView workerId, workerName, processName;
-        EditText cuttingSlStart, cuttingSlEnd;
+        EditText cuttingSlStart, cuttingSlEnd, hourlyOutput;
         Spinner spinnerTime;
         Button saveIndividualEntry;
 
@@ -52,21 +52,22 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
             workerId = view.findViewById(R.id.workerId);
             workerName = view.findViewById(R.id.workerName);
             processName = view.findViewById(R.id.processName);
-            cuttingSlStart = view.findViewById(R.id.cuttingSlNo);
-            cuttingSlEnd = view.findViewById(R.id.cuttingSlNo2);
+            /*cuttingSlStart = view.findViewById(R.id.cuttingSlNo);
+            cuttingSlEnd = view.findViewById(R.id.cuttingSlNo2);*/
+            hourlyOutput = view.findViewById(R.id.hourlyOutput);
             saveIndividualEntry = view.findViewById(R.id.saveIndividualEntry);
             spinnerTime.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, times));
 
             saveIndividualEntry.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(cuttingSlStart.getText().toString().isEmpty() || cuttingSlEnd.getText().toString().isEmpty()){
-                        Toast.makeText(context, "Insert all values", Toast.LENGTH_SHORT).show();
+                    if(hourlyOutput.getText().toString().isEmpty()){
+                        Toast.makeText(context, "Insert hourly output!", Toast.LENGTH_SHORT).show();
                     }else {
-                        int quantity = calculateQuantity(cuttingSlStart.getText().toString(), cuttingSlEnd.getText().toString());
+                        //int quantity = calculateQuantity(cuttingSlStart.getText().toString(), cuttingSlEnd.getText().toString());
                         HourlyEntry obj = new HourlyEntry(spinnerTime.getSelectedItem().toString(), workerId.getText().toString(), workerName.getText().toString(),
-                                processName.getText().toString(), cuttingSlStart.getText().toString(), cuttingSlEnd.getText().toString(),
-                                quantity);
+                                processName.getText().toString(),
+                                Integer.parseInt(hourlyOutput.getText().toString()));
                         saveIndividualEntry(obj);
                     }
                 }

@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void checkValidSupervisor(final String supervisorId, final String lineNo) {
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.CHECK_SUPERVISOR_URL, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.CHECK_SUPERVISOR_URL+"?supervisorId="+supervisorId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.contains("SUCCESS")) {
@@ -137,6 +137,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(LoginActivity.this, ReportActivity.class);
                     startActivity(intent);
+                }else{
+                    Toast.makeText(LoginActivity.this, "You are not a valid supervisor!", Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
