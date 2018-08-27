@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Supervisor ID"
-        android:inputType="text" />
+        android:inputType="number" />
 
     <!--<EditText
         android:id="@+id/editTextStyleId"

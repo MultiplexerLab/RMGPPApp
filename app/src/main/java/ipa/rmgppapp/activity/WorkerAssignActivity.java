@@ -62,7 +62,7 @@ public class WorkerAssignActivity extends AppCompatActivity {
             public void run() {
                 setData();
             }
-        }, 3000);
+        }, 4000);
     }
 
     private void setData() {
@@ -132,5 +132,6 @@ public class WorkerAssignActivity extends AppCompatActivity {
 
     public void continueWorkerAssign(View view) {
         adapter.saveData();
+        finish();
     }
 }

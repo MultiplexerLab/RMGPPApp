@@ -34,11 +34,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class LineEntryFragment extends Fragment {
 
-    String times[] = {"8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm"};
+    String times[] = {"9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm"};
     Button saveHourlyEntry;
     EditText editTextInput, editTextOutput, editTextProblemType, editTextStatus;
 
     public LineEntryFragment(){
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +47,10 @@ public class LineEntryFragment extends Fragment {
         View customView = inflater.inflate(R.layout.fragment_input_output, container, false);
         final Spinner spinnerTime = customView.findViewById(R.id.spinnerTime);
         spinnerTime.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, times));
+        editTextInput = customView.findViewById(R.id.editTextInput);
+        editTextOutput = customView.findViewById(R.id.editTextOutput);
+        editTextProblemType = customView.findViewById(R.id.editTextProblemType);
+        editTextStatus = customView.findViewById(R.id.editTextStatus);
 
         saveHourlyEntry = customView.findViewById(R.id.saveHourlyEntry);
 
@@ -85,7 +90,6 @@ public class LineEntryFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e("ArrayException", e.toString());
                 }
-
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
                 String supervisor = sharedPreferences.getString("supervisorId", "");
 

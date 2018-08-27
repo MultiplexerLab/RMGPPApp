@@ -15,6 +15,14 @@ public class ProcessItem {
         this.assignedWorkerId = assignedWorkerId;
     }
 
+    public ProcessItem(String processName, String machineType, Double hourlyTarget, String assignedWorkerId, String assignedWorkerName) {
+        this.processName = processName;
+        this.machineType = machineType;
+        this.hourlyTarget = hourlyTarget;
+        this.assignedWorkerId = assignedWorkerId;
+        this.assignedWorkerName = assignedWorkerName;
+    }
+
     public String getProcessName() {
         return processName;
     }

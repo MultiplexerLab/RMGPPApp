@@ -10,20 +10,20 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/processName"
+            android:id="@+id/processNameItem"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2" />
 
         <TextView
-            android:id="@+id/machineType"
+            android:id="@+id/machineTypeItem"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.75"
             android:inputType="textMultiLine" />
 
         <TextView
-            android:id="@+id/hourlyTarget"
+            android:id="@+id/hourlyTargetItem"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.75"

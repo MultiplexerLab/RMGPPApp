@@ -2,6 +2,7 @@ package ipa.rmgppapp.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import ipa.rmgppapp.R;
+import ipa.rmgppapp.adapter.IndividualEntryAdapter;
 import ipa.rmgppapp.helper.Endpoints;
 import ipa.rmgppapp.model.HourlyReportRow;
 import ipa.rmgppapp.model.ProcessItem;
@@ -45,18 +47,20 @@ public class HourlyReportFragment extends Fragment {
 
     }
     ArrayList<String[]> tableData;
-    private static final String[] TABLE_HEADERS = { "Worker\nName" , "Worker\nId","Process\nName", "8:01-9:00", "9:01-10:00", "10:01-11:00","11:01-12:00","12:01-13:00" };
-    private static final String[][] DATA_TO_SHOW = { {"Abul Kashem", "W123", "Neck Join", "89", "88", "98", "95", "97", "92"},
+    private static final String[] TABLE_HEADERS = { "Worker\nName" , "Worker\nId","Process\nName", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm" };
+    private /*static final String[][] DATA_TO_SHOW = { {"Abul Kashem", "W123", "Neck Join", "89", "88", "98", "95", "97", "92"},
             {"Fatema Jahan", "W124", "Neck Join", "89", "88", "98", "95", "97", "92"},
             {"Morjina Khatun", "W126", "Side Join", "89", "88", "98", "95", "96", "94"},
-            {"Habib", "W129", "Ham Join", "89", "88", "88", "85", "97", "99"},};
+            {"Habib", "W129", "Ham Join", "89", "88", "88", "85", "97", "99"},};*/
+    TableView tableView;
+    String prevId="";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View customView = inflater.inflate(R.layout.fragment_hourly_report, container, false);
-        TableView tableView = (TableView) customView.findViewById(R.id.tableView);
+        tableView = (TableView) customView.findViewById(R.id.tableView);
 
         tableData = new ArrayList<>();
 
@@ -69,72 +73,97 @@ public class HourlyReportFragment extends Fragment {
         columnModel1.setColumnWidth(0, 150);
         tableView.setColumnModel(columnModel1);
 
-        tableView.setDataAdapter(new SimpleTableDataAdapter(getActivity(), tableData));
-        tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(getActivity(), TABLE_HEADERS));
-
         getTableData();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("tableData", tableData.toString());
+                try {
+                    tableView.setDataAdapter(new SimpleTableDataAdapter(getActivity(), tableData));
+                    tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(getActivity(), TABLE_HEADERS));
+                }catch (Exception e){
+                    Log.e("tableDataErr", e.toString());
+                }
+            }
+        }, 3000);
 
         return customView;
     }
 
     private void getTableData() {
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        final RequestQueue queue = Volley.newRequestQueue(getActivity());
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("hourlyEntry", MODE_PRIVATE);
-        String data = sharedPreferences.getString("data", "");
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
+        String tag = sharedPreferences.getString("description", "");
 
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<ProcessItem>>() {
-        }.getType();
-        ArrayList<ProcessItem> processItems = gson.fromJson(data, type);
+        Log.i("TagGet", tag);
+        JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<ProcessItem>>() {
+                }.getType();
+                Log.i("DataAssignedWorker", response.toString());
+                ArrayList<ProcessItem> processItems = gson.fromJson(response.toString(), type);
 
-        for(int i=0; i<processItems.size(); i++){
-            final String workerId = processItems.get(i).getAssignedWorkerId();
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_HOURLY_RECORD_DATA+"?workerId="+workerId, new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response) {
-                    String arr[] = new String[12];
-                    for(int i=0; i<response.length(); i++){
-                        try {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            arr[0] = workerId;
-                            arr[1] = jsonObject.getString("workerName");
-                            arr[2] = jsonObject.getString("processName");
-                            String hour = jsonObject.getString("hour");
-                            if(hour.contains("9")){
-                                arr[3] = jsonObject.getString("quantity");
-                            }else if(hour.contains("10")){
-                                arr[4] = jsonObject.getString("quantity");
-                            }else if(hour.contains("11")){
-                                arr[5] = jsonObject.getString("quantity");
-                            }else if(hour.contains("12")){
-                                arr[6] = jsonObject.getString("quantity");
-                            }else if(hour.contains("1pm")){
-                                arr[7] = jsonObject.getString("quantity");
-                            }else if(hour.contains("2pm")){
-                                arr[8] = jsonObject.getString("quantity");
-                            }else if(hour.contains("3pm")){
-                                arr[9] = jsonObject.getString("quantity");
-                            }else if(hour.contains("4pm")){
-                                arr[10] = jsonObject.getString("quantity");
-                            }else if(hour.contains("5pm")){
-                                arr[11] = jsonObject.getString("quantity");
-                            }else if(hour.contains("6pm")){
-                                arr[12] = jsonObject.getString("quantity");
+                for(int i=0; i<processItems.size(); i++){
+                    final String workerId = processItems.get(i).getAssignedWorkerId();
+                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_HOURLY_RECORD_DATA + "?workerId=" + workerId, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                String arr[] = new String[12];
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        JSONObject jsonObject = response.getJSONObject(i);
+                                        arr[0] = workerId;
+                                        arr[1] = jsonObject.getString("workerName");
+                                        arr[2] = jsonObject.getString("processName");
+                                        String hour = jsonObject.getString("hour");
+                                        if (hour.contains("9")) {
+                                            arr[3] = jsonObject.getString("quantity");
+                                        } else if (hour.contains("10")) {
+                                            arr[4] = jsonObject.getString("quantity");
+                                        } else if (hour.contains("11")) {
+                                            arr[5] = jsonObject.getString("quantity");
+                                        } else if (hour.contains("12")) {
+                                            arr[6] = jsonObject.getString("quantity");
+                                        } else if (hour.contains("1pm")) {
+                                            arr[7] = jsonObject.getString("quantity");
+                                        } else if (hour.contains("2pm")) {
+                                            arr[8] = jsonObject.getString("quantity");
+                                        } else if (hour.contains("3pm")) {
+                                            arr[9] = jsonObject.getString("quantity");
+                                        } else if (hour.contains("4pm")) {
+                                            arr[10] = jsonObject.getString("quantity");
+                                        } else if (hour.contains("5pm")) {
+                                            arr[11] = jsonObject.getString("quantity");
+                                        } else if (hour.contains("6pm")) {
+                                            arr[12] = jsonObject.getString("quantity");
+                                        }
+                                        tableData.add(arr);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             }
-                            tableData.add(arr);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.i("HourlyReport", error.toString());
+                            }
+                        });
+                        queue.add(jsonArrayRequest);
+                        prevId = workerId;
                     }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.i("HourlyReport", error.toString());
-                }
-            });
-            queue.add(jsonArrayRequest);
-        }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ErrorWorkerAssign", error.toString());
+            }
+        });
+        queue.add(stringRequest);
     }
 }

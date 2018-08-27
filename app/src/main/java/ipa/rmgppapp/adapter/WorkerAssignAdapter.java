@@ -48,12 +48,14 @@ public class WorkerAssignAdapter extends BaseAdapter {
     ArrayList<ProcessItem> processItemArrayList;
     ArrayList<Worker> workerArrayList;
     ArrayList<String> workerIdList;
+    ArrayList<ProcessItem> assignedWorkerData;
 
     public WorkerAssignAdapter(Context context, ArrayList<ProcessItem> processItemArrayList, ArrayList<Worker> workerArrayList, ArrayList<String> workerIdList) {
         this.context = context;
         this.processItemArrayList = processItemArrayList;
         this.workerArrayList = workerArrayList;
         this.workerIdList = workerIdList;
+        assignedWorkerData = new ArrayList<>();
     }
 
     @Override
@@ -80,9 +82,9 @@ public class WorkerAssignAdapter extends BaseAdapter {
         View custom_view = inflater.inflate(R.layout.worker_assign_custom_layout, null);
 
         final TextView processName, machineType, hourlyTarget;
-        processName = custom_view.findViewById(R.id.processName);
-        machineType = custom_view.findViewById(R.id.machineType);
-        hourlyTarget = custom_view.findViewById(R.id.hourlyTarget);
+        processName = custom_view.findViewById(R.id.processNameItem);
+        machineType = custom_view.findViewById(R.id.machineTypeItem);
+        hourlyTarget = custom_view.findViewById(R.id.hourlyTargetItem);
         //Button buttonSaveWorkerAssign = custom_view.findViewById(R.id.buttonSaveWorkerAssign);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
@@ -92,21 +94,9 @@ public class WorkerAssignAdapter extends BaseAdapter {
         workerIdView.setAdapter(adapter);
 
         workerIdView.setText(processItemArrayList.get(position).getAssignedWorkerId());
-
         processName.setText(processItemArrayList.get(position).getProcessName());
         machineType.setText(processItemArrayList.get(position).getMachineType());
         hourlyTarget.setText(Math.round(processItemArrayList.get(position).getHourlyTarget()) + "");
-
-        /*if(position==(processItemArrayList.size()-1)){
-            buttonSaveWorkerAssign.setVisibility(View.VISIBLE);
-        }
-
-        buttonSaveWorkerAssign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveData();
-            }
-        });*/
 
         workerIdView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -122,12 +112,12 @@ public class WorkerAssignAdapter extends BaseAdapter {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!workerIdView.getText().toString().isEmpty()) {
+                if (!workerIdView.getText().toString().isEmpty() && workerIdView.getText().toString().length() > 3) {
                     try {
-                        processItemArrayList.get(position).setAssignedWorkerId(s.toString());
+                        ProcessItem processItem = processItemArrayList.get(position);
                         Worker worker = getWorkerInfo(s.toString());
-                        processItemArrayList.get(position).setAssignedWorkerName(worker.getName());
-                        processItemArrayList.get(position).setHourlyTarget((double) Math.round(processItemArrayList.get(position).getHourlyTarget()));
+                        assignedWorkerData.add(new ProcessItem(processItem.getProcessName(), processItem.getMachineType(), (double) Math.round(processItem.getHourlyTarget()),
+                                s.toString(), worker.getName()));
                     }catch (Exception e){
                         Log.e("ArrayListErr", e.toString());
                     }
@@ -160,7 +150,7 @@ public class WorkerAssignAdapter extends BaseAdapter {
 
                 } else {
                     Gson gson = new Gson();
-                    String jsonProcess = gson.toJson(processItemArrayList);
+                    String jsonProcess = gson.toJson(assignedWorkerData);
                     SharedPreferences.Editor editor = context.getSharedPreferences("hourlyEntry", MODE_PRIVATE).edit();
                     editor.putString("data", jsonProcess);
                     editor.commit();
@@ -187,7 +177,7 @@ public class WorkerAssignAdapter extends BaseAdapter {
                 try {
                     GsonBuilder gsonBuilder = new GsonBuilder();
                     Gson gson = gsonBuilder.create();
-                    jsonArrayString = gson.toJson(processItemArrayList);
+                    jsonArrayString = gson.toJson(assignedWorkerData);
 
                 } catch (Exception e) {
                     Log.e("ArrayException", e.toString());

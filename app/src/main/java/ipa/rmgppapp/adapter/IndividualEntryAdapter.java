@@ -38,7 +38,7 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
 
     private ArrayList<ProcessItem> processItems;
     Context context;
-    String times[] = {"9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm"};
+    String times[] = {"9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm"};
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView workerId, workerName, processName;
@@ -61,9 +61,9 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
             saveIndividualEntry.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(hourlyOutput.getText().toString().isEmpty()){
+                    if (hourlyOutput.getText().toString().isEmpty()) {
                         Toast.makeText(context, "Insert hourly output!", Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         //int quantity = calculateQuantity(cuttingSlStart.getText().toString(), cuttingSlEnd.getText().toString());
                         HourlyEntry obj = new HourlyEntry(spinnerTime.getSelectedItem().toString(), workerId.getText().toString(), workerName.getText().toString(),
                                 processName.getText().toString(),
@@ -84,11 +84,11 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
         String size2 = cuttingSlEnd.substring(3, 3);
         int quantity2 = Integer.parseInt(cuttingSlEnd.substring(4, 6));
 
-        if(size1.equals(size2)){
-            if(quantity1<quantity2){
-                quantity = (quantity2 - quantity1)+1;
-            }else{
-                quantity = (quantity1 - quantity2)+1;
+        if (size1.equals(size2)) {
+            if (quantity1 < quantity2) {
+                quantity = (quantity2 - quantity1) + 1;
+            } else {
+                quantity = (quantity1 - quantity2) + 1;
             }
         }
         return quantity;
@@ -99,9 +99,10 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.POST_HOURLY_DATA_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(response.contains("SUCCESS")){
+                if (response.contains("SUCCESS")) {
                     Toast.makeText(context, "Data is saved!", Toast.LENGTH_SHORT).show();
                 }
+                Log.i("Response", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -150,10 +151,14 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        ProcessItem processItem = processItems.get(position);
-        holder.workerId.setText(processItem.getAssignedWorkerId());
-        holder.workerName.setText(processItem.getAssignedWorkerName());
-        holder.processName.setText(processItem.getProcessName());
+        if (processItems.get(position).getAssignedWorkerId() != null) {
+            ProcessItem processItem = processItems.get(position);
+            holder.workerId.setText(processItem.getAssignedWorkerId());
+            holder.workerName.setText(processItem.getAssignedWorkerName());
+            holder.processName.setText(processItem.getProcessName());
+        } else {
+
+        }
     }
 
     @Override

@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -114,22 +117,22 @@ public class ReportActivity extends AppCompatActivity {
         tableView.addDataClickListener(new TableDataClickListener() {
             @Override
             public void onDataClicked(int rowIndex, Object clickedData) {
-                tableView.getDataAdapter().getView(rowIndex, null, null).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                //tableView.getDataAdapter().getCellView(rowIndex, 1, tableView).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 String description = planningData.get(rowIndex).getDescription();
                 String temp[] = description.split(" ");
+                Log.i("descriptionTag", temp[0]);
+
                 SharedPreferences.Editor editor = getSharedPreferences("supervisor", MODE_PRIVATE).edit();
                 editor.putString("description", temp[0]);
                 editor.commit();
 
-                Log.i("description", temp[0]);
-
-                tableView.setDataRowBackgroundProvider(new TableDataRowBackgroundProvider() {
-                    @Override
-                    public Drawable getRowBackground(int rowIndex, Object rowData) {
-                        return getResources().getDrawable(R.drawable.ic_launcher_background);
-                    }
-                });
+                try {
+                    LinearLayout linearLayout = findViewById(R.id.rootLayoutReport);
+                    //tableView.getDataAdapter().getView(rowIndex, null, linearLayout).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    //tableView.getDataAdapter().getCellView(rowIndex, 2, linearLayout).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    //tableView.getDataAdapter().notifyDataSetChanged();
+                }catch (Exception e){
+                    Log.e("tableDataErr", e.toString());
+                }
             }
         });
     }

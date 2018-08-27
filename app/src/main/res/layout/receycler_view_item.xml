@@ -61,7 +61,8 @@
         android:id="@+id/hourlyOutput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Hourly Output"/>
+        android:hint="Hourly Output"
+        android:inputType="number"/>
 
     <Button
         android:id="@+id/saveIndividualEntry"
