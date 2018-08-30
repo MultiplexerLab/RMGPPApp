@@ -123,6 +123,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = getSharedPreferences("supervisor", MODE_PRIVATE).edit();
                 editor.putString("description", temp[0]);
+                editor.putString("styleNo", planningData.get(rowIndex).getStyle());
                 editor.commit();
 
                 try {

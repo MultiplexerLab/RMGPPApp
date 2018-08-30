@@ -54,11 +54,15 @@ public class LineEntryFragment extends Fragment {
 
         saveHourlyEntry = customView.findViewById(R.id.saveHourlyEntry);
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
+        final String styleNo = sharedPreferences.getString("styleNo", "");
+
         saveHourlyEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LineEntry lineEntry = new LineEntry(spinnerTime.getSelectedItem().toString(), editTextInput.getText().toString(),
-                        editTextOutput.getText().toString(), editTextProblemType.getText().toString(), editTextStatus.getText().toString());
+                        editTextOutput.getText().toString(), editTextProblemType.getText().toString(), editTextStatus.getText().toString(),
+                        styleNo);
                 saveLineEntry(lineEntry);
             }
         });
@@ -67,7 +71,7 @@ public class LineEntryFragment extends Fragment {
 
     private void saveLineEntry(final LineEntry obj) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.POST_HOURLY_DATA_URL, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.POST_LINE_DATA_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if(response.contains("SUCCESS")){

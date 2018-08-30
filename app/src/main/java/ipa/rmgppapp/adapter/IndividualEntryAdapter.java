@@ -124,10 +124,12 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
 
                 SharedPreferences sharedPreferences = context.getSharedPreferences("supervisor", MODE_PRIVATE);
                 String supervisor = sharedPreferences.getString("supervisorId", "");
+                String styleNo = sharedPreferences.getString("styleNo", "");
 
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("jsonString", jsonString);
                 params.put("supervisor", supervisor);
+                params.put("styleNo", styleNo);
                 Log.i("jsonString", jsonString);
                 return params;
             }

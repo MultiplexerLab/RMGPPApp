@@ -24,9 +24,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="Assign Workers"
+                    android:text="Assign\nWorkers"
                     android:padding="5dp"
                     android:layout_marginRight="5dp"
+                    android:background="#65ef87"/>
+
+
+                <Button
+                    android:id="@+id/buttonLineInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/buttonJumpWorkerAssign"
+                    android:text="Line Input"
+                    android:padding="5dp"
+                    android:layout_marginRight="10dp"
                     android:background="#65ef87"/>
             </RelativeLayout>
 

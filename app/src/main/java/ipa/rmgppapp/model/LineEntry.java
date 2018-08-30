@@ -7,13 +7,23 @@ public class LineEntry {
     private String lineOutput;
     private String problemType;
     private String status;
+    private String styleNo;
 
-    public LineEntry(String hour, String lineInput, String lineOutput, String problemType, String status) {
+    public LineEntry(String hour, String lineInput, String lineOutput, String problemType, String status, String styleNo) {
         this.hour = hour;
         this.lineInput = lineInput;
         this.lineOutput = lineOutput;
         this.problemType = problemType;
         this.status = status;
+        this.styleNo = styleNo;
+    }
+
+    public String getStyleNo() {
+        return styleNo;
+    }
+
+    public void setStyleNo(String styleNo) {
+        this.styleNo = styleNo;
     }
 
     public String getHour() {

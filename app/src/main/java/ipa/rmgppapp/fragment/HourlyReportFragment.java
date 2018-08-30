@@ -48,7 +48,7 @@ public class HourlyReportFragment extends Fragment {
     }
     ArrayList<String[]> tableData;
     private static final String[] TABLE_HEADERS = { "Worker\nName" , "Worker\nId","Process\nName", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm" };
-    private /*static final String[][] DATA_TO_SHOW = { {"Abul Kashem", "W123", "Neck Join", "89", "88", "98", "95", "97", "92"},
+    /*private static final String[][] DATA_TO_SHOW = { {"Abul Kashem", "W123", "Neck Join", "89", "88", "98", "95", "97", "92"},
             {"Fatema Jahan", "W124", "Neck Join", "89", "88", "98", "95", "97", "92"},
             {"Morjina Khatun", "W126", "Side Join", "89", "88", "98", "95", "96", "94"},
             {"Habib", "W129", "Ham Join", "89", "88", "88", "85", "97", "99"},};*/
@@ -64,13 +64,10 @@ public class HourlyReportFragment extends Fragment {
 
         tableData = new ArrayList<>();
 
-        TableColumnWeightModel columnModel = new TableColumnWeightModel(8);
-        columnModel.setColumnWeight(1, 2);
-        columnModel.setColumnWeight(2, 2);
-        tableView.setColumnModel(columnModel);
-
-        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(getActivity(), 8, 120);
+        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(getActivity(), 14, 80);
         columnModel1.setColumnWidth(0, 150);
+        columnModel1.setColumnWidth(1, 100);
+        columnModel1.setColumnWidth(2, 150);
         tableView.setColumnModel(columnModel1);
 
         getTableData();
@@ -106,20 +103,24 @@ public class HourlyReportFragment extends Fragment {
                 Type type = new TypeToken<List<ProcessItem>>() {
                 }.getType();
                 Log.i("DataAssignedWorker", response.toString());
-                ArrayList<ProcessItem> processItems = gson.fromJson(response.toString(), type);
+                final ArrayList<ProcessItem> processItems = gson.fromJson(response.toString(), type);
 
                 for(int i=0; i<processItems.size(); i++){
                     final String workerId = processItems.get(i).getAssignedWorkerId();
-                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_HOURLY_RECORD_DATA + "?workerId=" + workerId, new Response.Listener<JSONArray>() {
+                    final int finalI = i;
+                    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_HOURLY_RECORD_DATA + "?workerId=" + workerId, new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
                                 String arr[] = new String[12];
-                                for (int i = 0; i < response.length(); i++) {
+                                arr[1] = workerId;
+                                arr[0] = processItems.get(finalI).getAssignedWorkerName();
+                                arr[2] = processItems.get(finalI).getProcessName();
+
+                                for (int j = 0; j < response.length(); j++) {
                                     try {
-                                        JSONObject jsonObject = response.getJSONObject(i);
-                                        arr[0] = workerId;
-                                        arr[1] = jsonObject.getString("workerName");
-                                        arr[2] = jsonObject.getString("processName");
+                                        JSONObject jsonObject = response.getJSONObject(j);
+                                        Log.i("HourlyData", jsonObject.toString());
+
                                         String hour = jsonObject.getString("hour");
                                         if (hour.contains("9")) {
                                             arr[3] = jsonObject.getString("quantity");
@@ -141,12 +142,14 @@ public class HourlyReportFragment extends Fragment {
                                             arr[11] = jsonObject.getString("quantity");
                                         } else if (hour.contains("6pm")) {
                                             arr[12] = jsonObject.getString("quantity");
+                                        }else if (hour.contains("7pm")) {
+                                            arr[13] = jsonObject.getString("quantity");
                                         }
-                                        tableData.add(arr);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
+                                tableData.add(arr);
                             }
                         }, new Response.ErrorListener() {
                             @Override
