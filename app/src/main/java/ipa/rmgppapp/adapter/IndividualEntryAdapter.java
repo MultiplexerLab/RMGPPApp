@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,10 +65,11 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                     if (hourlyOutput.getText().toString().isEmpty()) {
                         Toast.makeText(context, "Insert hourly output!", Toast.LENGTH_SHORT).show();
                     } else {
+                        Date date = new Date();
+                        Log.i("CurrentDate", date.toString());
                         //int quantity = calculateQuantity(cuttingSlStart.getText().toString(), cuttingSlEnd.getText().toString());
                         HourlyEntry obj = new HourlyEntry(spinnerTime.getSelectedItem().toString(), workerId.getText().toString(), workerName.getText().toString(),
-                                processName.getText().toString(),
-                                Integer.parseInt(hourlyOutput.getText().toString()));
+                                processName.getText().toString(), Integer.parseInt(hourlyOutput.getText().toString()), date.toString());
                         saveIndividualEntry(obj);
                     }
                 }

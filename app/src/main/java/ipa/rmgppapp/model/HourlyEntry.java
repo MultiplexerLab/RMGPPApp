@@ -8,13 +8,15 @@ public class HourlyEntry {
     /*private String cuttingSlStart;
     private String cuttingSlEnd;*/
     private int quantity;
+    private String entryTime;
 
-    public HourlyEntry(String timeStamp, String workerId, String workerName, String processName, int quantity) {
+    public HourlyEntry(String timeStamp, String workerId, String workerName, String processName, int quantity, String entryTime) {
         this.timeStamp = timeStamp;
         this.workerId = workerId;
         this.workerName = workerName;
         this.processName = processName;
         this.quantity = quantity;
+        this.entryTime = entryTime;
     }
 
     public String getTimeStamp() {

@@ -79,7 +79,7 @@ public class ProductionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final AlertDialog dialog = new AlertDialog.Builder(ProductionActivity.this).create();
-                dialog.setTitle("Line Input");
+                dialog.setTitle("Total Line Target");
                 dialog.setCancelable(false);
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);

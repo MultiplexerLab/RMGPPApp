@@ -17,10 +17,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String deviceId = Settings.Secure.getString(getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-        Log.i("DeviceId", deviceId);
-
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -29,10 +25,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }, 3000);
-    }
-
-    public void checkPermission(View view) {
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
     }
 }

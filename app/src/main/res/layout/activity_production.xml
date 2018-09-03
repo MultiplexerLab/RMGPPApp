@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/buttonJumpWorkerAssign"
-                    android:text="Line Input"
+                    android:text="Total Target"
                     android:padding="5dp"
                     android:layout_marginRight="10dp"
                     android:background="#65ef87"/>

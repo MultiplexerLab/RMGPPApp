@@ -18,13 +18,13 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editText2"
+        android:layout_alignBaseline="@+id/lineTargetTotal"
         android:layout_alignStart="@+id/textView"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="Line Targe Total" />
 
     <TextView
-        android:id="@+id/editText2"
+        android:id="@+id/lineTargetTotal"
         android:layout_width="205dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -42,12 +42,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/textView"
-        android:layout_alignTop="@+id/editText3"
+        android:layout_alignTop="@+id/lineOutputTotal"
         android:text="Line Output"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TextView
-        android:id="@+id/editText3"
+        android:id="@+id/lineOutputTotal"
         android:layout_width="223dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -55,7 +55,7 @@
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary"
-        android:layout_alignStart="@+id/editText2"
+        android:layout_alignStart="@+id/lineTargetTotal"
         android:layout_marginTop="90dp"
         android:ems="10"
         android:inputType="textPersonName" />
@@ -71,12 +71,12 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TextView
-        android:id="@+id/editText4"
+        android:id="@+id/activeTarget"
         android:layout_width="221dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/textView4"
         android:layout_toRightOf="@id/textView4"
-        android:layout_alignLeft="@id/editText2"
+        android:layout_alignLeft="@id/lineTargetTotal"
         android:ems="10"
         android:text="500"
         android:textStyle="bold"
@@ -95,10 +95,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TextView
-        android:id="@+id/editText5"
+        android:id="@+id/lineWIP"
         android:layout_width="223dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/editText2"
+        android:layout_alignStart="@+id/lineTargetTotal"
         android:layout_alignTop="@+id/textView5"
         android:inputType="textPersonName"
         android:text="NA"

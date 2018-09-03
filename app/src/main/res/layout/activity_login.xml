@@ -25,28 +25,15 @@
         android:hint="Supervisor ID"
         android:inputType="number" />
 
-    <!--<EditText
-        android:id="@+id/editTextStyleId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Style No/ID" />-->
-
     <Spinner
+        android:id="@+id/spinnerLine"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerLine"></Spinner>
+        android:layout_height="wrap_content"></Spinner>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="Extra"
-            android:visibility="gone" />
 
         <Button
             android:layout_width="0dp"

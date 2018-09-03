@@ -22,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,9 +61,10 @@ public class LineEntryFragment extends Fragment {
         saveHourlyEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Date date = new Date();
                 LineEntry lineEntry = new LineEntry(spinnerTime.getSelectedItem().toString(), editTextInput.getText().toString(),
                         editTextOutput.getText().toString(), editTextProblemType.getText().toString(), editTextStatus.getText().toString(),
-                        styleNo);
+                        styleNo, date.toString());
                 saveLineEntry(lineEntry);
             }
         });

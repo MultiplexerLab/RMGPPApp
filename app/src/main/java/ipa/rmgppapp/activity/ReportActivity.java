@@ -2,44 +2,27 @@ package ipa.rmgppapp.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import org.json.JSONArray;
-
 import java.lang.reflect.Type;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import de.codecrafters.tableview.TableView;
-import de.codecrafters.tableview.colorizers.TableDataRowColorizer;
-import de.codecrafters.tableview.listeners.OnScrollListener;
 import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
-import de.codecrafters.tableview.model.TableColumnWeightModel;
-import de.codecrafters.tableview.providers.TableDataRowBackgroundProvider;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import ipa.rmgppapp.R;
@@ -50,12 +33,8 @@ public class ReportActivity extends AppCompatActivity {
 
     private static final String[] TABLE_HEADERS = {"SL No", "Buyer", "Style", "Item", "Order", "Quantity", "Ship Date"};
 
-    /*private static final String[][] DATA_TO_SHOW = {{"1", "OVS", "OVS123", "PO123", "10000", "10 August, 2018", "Cutting complete"},
-            {"2", "SICEM", "OVS124", "PO124", "20000", "30 August, 2018", "Cutting complete"},
-            {"3", "Li&Fung", "Li123", "PO222", "50000", "30 September, 2018", "Markers Done"}};*/
-
     RequestQueue queue;
-    ArrayList<PlanningData> planningData;
+    ArrayList<PlanningData> planningDataArrayList;
     ArrayList<String[]> tableData;
 
     @Override
@@ -64,7 +43,7 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report);
 
         queue = Volley.newRequestQueue(this);
-        planningData = new ArrayList<>();
+        planningDataArrayList = new ArrayList<>();
         tableData = new ArrayList<>();
 
         SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
@@ -79,10 +58,10 @@ public class ReportActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     Type type = new TypeToken<List<PlanningData>>() {
                     }.getType();
-                    planningData = gson.fromJson(response.toString(), type);
+                    planningDataArrayList = gson.fromJson(response.toString(), type);
 
-                    for (int i = 0; i < planningData.size(); i++) {
-                        PlanningData obj = planningData.get(i);
+                    for (int i = 0; i < planningDataArrayList.size(); i++) {
+                        PlanningData obj = planningDataArrayList.get(i);
                         tableData.add(i, new String[]{(i + 1) + "", obj.getBuyer(), obj.getStyle(), obj.getItem(), obj.getOrderNo(), obj.getPlannedQuantity(), obj.getShipmentData()});
                     }
                     setTableData();
@@ -117,13 +96,13 @@ public class ReportActivity extends AppCompatActivity {
         tableView.addDataClickListener(new TableDataClickListener() {
             @Override
             public void onDataClicked(int rowIndex, Object clickedData) {
-                String description = planningData.get(rowIndex).getDescription();
+                String description = planningDataArrayList.get(rowIndex).getDescription();
                 String temp[] = description.split(" ");
                 Log.i("descriptionTag", temp[0]);
 
                 SharedPreferences.Editor editor = getSharedPreferences("supervisor", MODE_PRIVATE).edit();
                 editor.putString("description", temp[0]);
-                editor.putString("styleNo", planningData.get(rowIndex).getStyle());
+                editor.putString("styleNo", planningDataArrayList.get(rowIndex).getStyle());
                 editor.commit();
 
                 try {
@@ -151,5 +130,10 @@ public class ReportActivity extends AppCompatActivity {
             Intent intent = new Intent(ReportActivity.this, ProductionActivity.class);
             startActivity(intent);
         }
+    }
+
+    public void addStyle(View view) {
+        Intent intent = new Intent(ReportActivity.this, AddNewStyle.class);
+        startActivity(intent);
     }
 }

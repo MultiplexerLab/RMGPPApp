@@ -77,24 +77,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getSpinnerData() {
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PLANNED_LINE_URL, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        lineData.add(response.getJSONObject(i).getString("line"));
-                        adapter.notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        Log.e("LineError", e.toString());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PLANNED_LINE_URL,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+
+                        for(int i=0; i<jsonArray.length(); i++){
+                            try {
+                                lineData.add(jsonArray.getJSONObject(i).getString("line"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
                     }
-                }
-            }
-        }, new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("VolleyError", error.toString());
+                Log.e("PlannedLineVolley", error.toString());
             }
         });
+
         queue.add(jsonArrayRequest);
     }
 
@@ -126,7 +129,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void checkValidSupervisor(final String supervisorId, final String lineNo) {
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.CHECK_SUPERVISOR_URL+"?supervisorId="+supervisorId, new Response.Listener<String>() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Endpoints.CHECK_SUPERVISOR_URL+"?supervisorId="+supervisorId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.contains("SUCCESS")) {
@@ -146,14 +150,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.e("CheckSuperVisor", error.toString());
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("superVisorId", supervisorId);
-                return params;
-            }
-        };
+        });
         queue.add(stringRequest);
     }
 

@@ -23,7 +23,7 @@
             android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
 
-        <!-- <Button
+        <Button
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:layout_weight="4"
@@ -31,7 +31,7 @@
              android:onClick="addStyle"
              android:text="Add New Style"
              android:textColor="@color/textColor"
-             android:visibility="gone" />-->
+             android:visibility="visible" />
     </LinearLayout>
 
     <HorizontalScrollView

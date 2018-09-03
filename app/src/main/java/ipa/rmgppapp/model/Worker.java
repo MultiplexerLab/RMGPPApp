@@ -6,12 +6,14 @@ public class Worker {
     private String name;
     private String designation;
     private String department;
+    private String entryTime;
 
-    public Worker(String workerId, String name, String designation, String department) {
+    public Worker(String workerId, String name, String designation, String department, String entryTime) {
         this.workerId = workerId;
         this.name = name;
         this.designation = designation;
         this.department = department;
+        this.entryTime = entryTime;
     }
 
     public String getWorkerId() {
@@ -44,5 +46,13 @@ public class Worker {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public String getEntryTime() {
+        return entryTime;
+    }
+
+    public void setEntryTime(String entryTime) {
+        this.entryTime = entryTime;
     }
 }

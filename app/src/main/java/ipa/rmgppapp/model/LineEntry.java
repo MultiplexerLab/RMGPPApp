@@ -8,14 +8,16 @@ public class LineEntry {
     private String problemType;
     private String status;
     private String styleNo;
+    private String entryTime;
 
-    public LineEntry(String hour, String lineInput, String lineOutput, String problemType, String status, String styleNo) {
+    public LineEntry(String hour, String lineInput, String lineOutput, String problemType, String status, String styleNo, String entryTime) {
         this.hour = hour;
         this.lineInput = lineInput;
         this.lineOutput = lineOutput;
         this.problemType = problemType;
         this.status = status;
         this.styleNo = styleNo;
+        this.entryTime = entryTime;
     }
 
     public String getStyleNo() {
@@ -64,5 +66,13 @@ public class LineEntry {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getEntryTime() {
+        return entryTime;
+    }
+
+    public void setEntryTime(String entryTime) {
+        this.entryTime = entryTime;
     }
 }
