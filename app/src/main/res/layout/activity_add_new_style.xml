@@ -15,28 +15,47 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary"/>
 
-    <EditText
+    <AutoCompleteTextView
+        android:id="@+id/styleNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Buyer"
-        android:layout_marginTop="20dp"/>
+        android:hint="Type Style No"
+        android:layout_marginTop="20dp"
+        android:inputType="text" />
 
     <EditText
+        android:id="@+id/buyer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Style"/>
+        android:hint="Buyer"/>
 
     <EditText
+        android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Order"/>
+        android:hint="Description"/>
 
     <EditText
+        android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Allocated Quantity"/>
+        android:hint="Item"/>
 
     <EditText
+        android:id="@+id/order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Order No"/>
+
+    <EditText
+        android:id="@+id/quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Allocated Quantity"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/shipMentDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Shipment Date"/>

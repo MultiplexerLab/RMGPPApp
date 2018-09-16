@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -30,6 +32,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import ipa.rmgppapp.R;
+import ipa.rmgppapp.adapter.IndividualEntryAdapter;
 import ipa.rmgppapp.adapter.WorkerAssignAdapter;
 import ipa.rmgppapp.helper.Endpoints;
 import ipa.rmgppapp.model.PlanningData;
@@ -38,7 +41,7 @@ import ipa.rmgppapp.model.Worker;
 
 public class WorkerAssignActivity extends AppCompatActivity {
 
-    ListView listViewProcess;
+    RecyclerView mRecyclerView;
     ArrayList<ProcessItem> processItemArrayList;
     ArrayList<Worker> workerList;
     ArrayList<String> workerIdList;
@@ -51,7 +54,10 @@ public class WorkerAssignActivity extends AppCompatActivity {
         setContentView(R.layout.activity_worker_assign);
 
         queue = Volley.newRequestQueue(this);
-        listViewProcess = findViewById(R.id.listViewProcess);
+        mRecyclerView = findViewById(R.id.recyclerViewProcess);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+
         processItemArrayList = new ArrayList<>();
         workerList = new ArrayList<>();
         workerIdList = new ArrayList<>();
@@ -62,7 +68,7 @@ public class WorkerAssignActivity extends AppCompatActivity {
             public void run() {
                 setData();
             }
-        }, 4000);
+        }, 5000);
     }
 
     private void setData() {
@@ -70,26 +76,26 @@ public class WorkerAssignActivity extends AppCompatActivity {
         final String description = sharedPreferences.getString("description", "");
         Log.i("description", description);
 
-        if(workerList.size()>0) {
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_OPERATION_DATA_URL + "?description=" + description, new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response) {
-                    Log.i("getPlanning", response.toString());
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<List<ProcessItem>>() {
-                    }.getType();
-                    processItemArrayList = gson.fromJson(response.toString(), type);
-                    adapter = new WorkerAssignAdapter(WorkerAssignActivity.this, processItemArrayList, workerList, workerIdList);
-                    listViewProcess.setAdapter(adapter);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("ErrorVolley", error.toString());
-                }
-            });
-            queue.add(jsonArrayRequest);
-        }
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_OPERATION_DATA_URL + "?description=" + description, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.i("getPlanning", response.toString());
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<ProcessItem>>() {
+                }.getType();
+                processItemArrayList = gson.fromJson(response.toString(), type);
+                /*adapter = new WorkerAssignAdapter(WorkerAssignActivity.this, processItemArrayList, workerList, workerIdList);
+                listViewProcess.setAdapter(adapter);*/
+                adapter = new WorkerAssignAdapter(WorkerAssignActivity.this, processItemArrayList, workerList, workerIdList);
+                mRecyclerView.setAdapter(adapter);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ErrorVolley", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
     }
 
     private void getAllWorkerId() {
@@ -98,16 +104,16 @@ public class WorkerAssignActivity extends AppCompatActivity {
             public void onResponse(JSONArray response) {
                 Log.i("responseWorker", response.toString());
 
-                try{
+                try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<List<Worker>>() {
                     }.getType();
                     workerList = gson.fromJson(response.toString(), type);
                     Log.i("workerList", workerList.toString());
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.e("WorkerErr", e.toString());
                 }
-                for(int i=0; i<response.length(); i++){
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         String workerId = response.getJSONObject(i).getString("workerId");
                         Log.i("WorkerId", workerId);

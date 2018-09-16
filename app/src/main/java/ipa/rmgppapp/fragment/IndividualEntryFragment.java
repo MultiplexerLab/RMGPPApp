@@ -42,6 +42,7 @@ public class IndividualEntryFragment extends Fragment {
 
     RecyclerView mRecyclerView;
     RequestQueue queue;
+    String problemTypes[] = {"Choose a problem Type", "Input", "Maintenance", "Quality", "Production"};
 
     public IndividualEntryFragment() {
     }
@@ -60,16 +61,6 @@ public class IndividualEntryFragment extends Fragment {
 
         getAssignedWorkerData();
 
-        /*if (data.isEmpty()) {
-            Toast.makeText(getActivity(), "Assign Workers first!", Toast.LENGTH_SHORT).show();
-        } else {
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<ProcessItem>>() {
-            }.getType();
-            ArrayList<ProcessItem> processItems = gson.fromJson(data, type);
-            IndividualEntryAdapter adapter = new IndividualEntryAdapter(getActivity(), processItems);
-            mRecyclerView.setAdapter(adapter);
-        }*/
         return customView;
     }
 
@@ -96,7 +87,6 @@ public class IndividualEntryFragment extends Fragment {
                 Log.e("ErrorWorkerAssign", error.toString());
             }
         });
-
         queue.add(stringRequest);
     }
 }

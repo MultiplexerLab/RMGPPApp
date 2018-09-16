@@ -6,11 +6,12 @@ public class LineEntry {
     private String lineInput;
     private String lineOutput;
     private String problemType;
+    private String problem;
     private String status;
     private String styleNo;
     private String entryTime;
 
-    public LineEntry(String hour, String lineInput, String lineOutput, String problemType, String status, String styleNo, String entryTime) {
+    public LineEntry(String hour, String lineInput, String lineOutput, String problemType, String problem, String status, String styleNo, String entryTime) {
         this.hour = hour;
         this.lineInput = lineInput;
         this.lineOutput = lineOutput;
@@ -18,6 +19,15 @@ public class LineEntry {
         this.status = status;
         this.styleNo = styleNo;
         this.entryTime = entryTime;
+        this.problem = problem;
+    }
+
+    public String getProblem() {
+        return problem;
+    }
+
+    public void setProblem(String problem) {
+        this.problem = problem;
     }
 
     public String getStyleNo() {

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,11 +19,17 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,15 +44,20 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntryAdapter.MyViewHolder> {
 
-    private ArrayList<ProcessItem> processItems;
+    ArrayList<ProcessItem> processItems;
+    ArrayList<String> problems;
     Context context;
-    String times[] = {"9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm"};
+    String times[] = {"Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10"};
+    String problemTypes[] = {"Choose a problem Type", "Input", "Maintenance", "Quality", "Production"};
+    ArrayAdapter<String> adapter;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView workerId, workerName, processName;
-        EditText cuttingSlStart, cuttingSlEnd, hourlyOutput;
+        TextView workerId, workerName, processName, hourlyTarget;
+        EditText hourlyOutput;
         Spinner spinnerTime;
         Button saveIndividualEntry;
+        Spinner problemTypeSpinner, problemsSpinner;
+        boolean flag = false;
 
         public MyViewHolder(View view) {
             super(view);
@@ -53,11 +65,53 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
             workerId = view.findViewById(R.id.workerId);
             workerName = view.findViewById(R.id.workerName);
             processName = view.findViewById(R.id.processName);
-            /*cuttingSlStart = view.findViewById(R.id.cuttingSlNo);
-            cuttingSlEnd = view.findViewById(R.id.cuttingSlNo2);*/
             hourlyOutput = view.findViewById(R.id.hourlyOutput);
             saveIndividualEntry = view.findViewById(R.id.saveIndividualEntry);
+            problemTypeSpinner = view.findViewById(R.id.problemTypeSpinner);
+            problemsSpinner = view.findViewById(R.id.problemsSpinner);
+            hourlyTarget = view.findViewById(R.id.hourlyTarget);
+
             spinnerTime.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, times));
+
+            problems = new ArrayList<>();
+            problems.add("Choose a Problem");
+
+            problemTypeSpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, problemTypes));
+            adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, problems);
+            problemsSpinner.setAdapter(adapter);
+
+            problemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    flag = true;
+                    RequestQueue queue = Volley.newRequestQueue(context);
+                    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PROBLEM_DATA_URL + "?problemType=" + problemTypes[position], new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            for (int i = 0; i < response.length(); i++) {
+                                try {
+                                    String problem = response.getJSONObject(i).getString("Problem");
+                                    problems.add(problem);
+                                    adapter.notifyDataSetChanged();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    });
+                    queue.add(jsonArrayRequest);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
 
             saveIndividualEntry.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,17 +119,29 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                     if (hourlyOutput.getText().toString().isEmpty()) {
                         Toast.makeText(context, "Insert hourly output!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Date date = new Date();
-                        Log.i("CurrentDate", date.toString());
+                        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                        String requiredDate = df.format(new Date()).toString();
+
+                        String problemType = "";
+                        String problem = "";
+
+                        if(flag){
+                            if(!problemTypeSpinner.getSelectedItem().toString().contains("Choose")) {
+                                problemType = problemTypeSpinner.getSelectedItem().toString();
+                                problem = problemsSpinner.getSelectedItem().toString();
+                            }
+                        }
                         //int quantity = calculateQuantity(cuttingSlStart.getText().toString(), cuttingSlEnd.getText().toString());
                         HourlyEntry obj = new HourlyEntry(spinnerTime.getSelectedItem().toString(), workerId.getText().toString(), workerName.getText().toString(),
-                                processName.getText().toString(), Integer.parseInt(hourlyOutput.getText().toString()), date.toString());
+                                processName.getText().toString(), Integer.parseInt(hourlyOutput.getText().toString()), requiredDate, problemType,
+                                problem);
                         saveIndividualEntry(obj);
                     }
                 }
             });
         }
     }
+
 
     private int calculateQuantity(String cuttingSlStart, String cuttingSlEnd) {
         int quantity = 0;
@@ -155,13 +221,12 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        if (processItems.get(position).getAssignedWorkerId() != null) {
+        if (processItems.get(position).getAssignedWorkerId() != null || !processItems.get(position).getAssignedWorkerId().isEmpty()) {
             ProcessItem processItem = processItems.get(position);
             holder.workerId.setText(processItem.getAssignedWorkerId());
             holder.workerName.setText(processItem.getAssignedWorkerName());
             holder.processName.setText(processItem.getProcessName());
-        } else {
-
+            holder.hourlyTarget.setText(Math.round(processItem.getHourlyTarget())+"");
         }
     }
 

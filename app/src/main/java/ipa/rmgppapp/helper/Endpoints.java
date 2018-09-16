@@ -14,4 +14,9 @@ public class Endpoints {
     public static final String GET_HOURLY_RECORD_DATA = BASE_URL+"getHourlyData.php";
     public static final String GET_ASSIGNED_WORKER_URL = BASE_URL+"getAssignedWorkerData.php";
     public static final String GET_SUMMERY_DATA = BASE_URL+"getSummeryData.php";
+    public static final String POST_NEW_STYLE_URL = BASE_URL+"insertStyle.php";
+    public static final String GET_LINE_DATA_URL = BASE_URL+"checkLineTarget.php";
+    public static final String GET_PROBLEM_DATA_URL = BASE_URL+"getProblemData.php";
+    public static final String GET_ALL_STYLES = BASE_URL+"getAllStyles.php";
+    public static final String GET_STYLE_DETAILS = BASE_URL+"getStyleDetails.php";
 }

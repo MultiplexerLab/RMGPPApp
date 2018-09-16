@@ -20,11 +20,19 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +51,7 @@ public class ProductionActivity extends AppCompatActivity {
     ViewPagerAdapter adapter;
     Toolbar toolbar;
     Button buttonJumpWorkerAssign, buttonLineInput;
+    String totalTarget, totalHours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +68,8 @@ public class ProductionActivity extends AppCompatActivity {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         adapter.addFragments(new IndividualEntryFragment(), "Individual Entry");
-        adapter.addFragments(new LineEntryFragment(), "Line\nEntry");
         adapter.addFragments(new HourlyReportFragment(), "Hourly Report");
+        adapter.addFragments(new LineEntryFragment(), "Line\nEntry");
         adapter.addFragments(new FullDaySummery(), "Full Day Summery");
 
         viewPager.setAdapter(adapter);
@@ -74,40 +83,71 @@ public class ProductionActivity extends AppCompatActivity {
             }
         });
 
-
+        SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
+        String styleNo = sharedPreferences.getString("styleNo", "");
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String currentDate = df.format(new Date()).toString();
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_LINE_DATA_URL+"?styleNo="+styleNo+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.i("responseLineData", response.toString());
+                try {
+                    JSONObject jsonObject = response.getJSONObject(0);
+                    totalTarget = jsonObject.getString("totalTarget");
+                    totalHours = jsonObject.getString("totalHours");
+                } catch (JSONException e) {
+                    showLineTargetDialog();
+                    Log.e("JSONLineDataErr", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                showLineTargetDialog();
+                Log.e("LineDataErr", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
         buttonLineInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog dialog = new AlertDialog.Builder(ProductionActivity.this).create();
-                dialog.setTitle("Total Line Target");
-                dialog.setCancelable(false);
-
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View customView = inflater.inflate(R.layout.dialog_layout_line_input, null);
-
-                dialog.setView(customView);
-
-                Button saveButton = customView.findViewById(R.id.lineInputBtn);
-                final EditText lineInput = customView.findViewById(R.id.editTextLineInput);
-                final EditText totalHours = customView.findViewById(R.id.editTextTotalHours);
-
-                saveButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
-                        String styleNo = sharedPreferences.getString("styleNo", "");
-                        String lineInputStr = lineInput.getText().toString();
-                        if(!lineInputStr.isEmpty()) {
-                            insertLineTarget(lineInputStr, styleNo, totalHours.getText().toString());
-                            dialog.dismiss();
-                        }else{
-                            Toast.makeText(ProductionActivity.this, "Insert Data!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                dialog.show();
+                showLineTargetDialog();
             }
         });
+    }
+
+    private void showLineTargetDialog() {
+        final AlertDialog dialog = new AlertDialog.Builder(ProductionActivity.this).create();
+        dialog.setTitle("Total Line Target");
+        dialog.setCancelable(true);
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_layout_line_input, null);
+
+        dialog.setView(customView);
+
+        Button saveButton = customView.findViewById(R.id.lineInputBtn);
+        final EditText lineInput = customView.findViewById(R.id.editTextLineInput);
+        final EditText totalHoursEd = customView.findViewById(R.id.editTextTotalHours);
+        lineInput.setText(totalTarget);
+        totalHoursEd.setText(totalHours);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
+                String styleNo = sharedPreferences.getString("styleNo", "");
+                String lineInputStr = lineInput.getText().toString();
+                if(!lineInputStr.isEmpty()) {
+                    insertLineTarget(lineInputStr, styleNo, totalHoursEd.getText().toString());
+                    dialog.dismiss();
+                }else{
+                    Toast.makeText(ProductionActivity.this, "Insert Data!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        dialog.show();
     }
 
     private void insertLineTarget(final String lineInputStr, final String styleNo, final String totalHours) {
@@ -129,12 +169,16 @@ public class ProductionActivity extends AppCompatActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String requiredDate = df.format(new Date()).toString();
+
                 int lineInput = Integer.parseInt(lineInputStr)/Integer.parseInt(totalHours);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("styleNo", styleNo);
                 params.put("lineTarget", lineInput+"");
                 params.put("totalTarget", lineInputStr);
                 params.put("totalHours", totalHours);
+                params.put("entryTime", requiredDate);
                 return params;
             }
         };

@@ -21,7 +21,7 @@
         android:layout_alignBaseline="@+id/lineTargetTotal"
         android:layout_alignStart="@+id/textView"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="Line Targe Total" />
+        android:text="Line Target Total" />
 
     <TextView
         android:id="@+id/lineTargetTotal"
@@ -32,7 +32,6 @@
         android:layout_marginEnd="18dp"
         android:layout_marginTop="56dp"
         android:inputType="textPersonName"
-        android:text="10000"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold" />
@@ -51,7 +50,6 @@
         android:layout_width="223dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="9000"
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary"
@@ -67,18 +65,17 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/textView"
         android:layout_marginTop="128dp"
-        android:text="Active Target\nPer Hour"
+        android:text="Total Input"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TextView
-        android:id="@+id/activeTarget"
+        android:id="@+id/totalInput"
         android:layout_width="221dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/textView4"
         android:layout_toRightOf="@id/textView4"
         android:layout_alignLeft="@id/lineTargetTotal"
         android:ems="10"
-        android:text="500"
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary"
@@ -90,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/textView"
-        android:layout_marginTop="179dp"
+        android:layout_marginTop="170dp"
         android:text="Line WIP"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -101,9 +98,38 @@
         android:layout_alignStart="@+id/lineTargetTotal"
         android:layout_alignTop="@+id/textView5"
         android:inputType="textPersonName"
-        android:text="NA"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Style Summery"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:layout_margin="20dp"
+        android:layout_below="@id/lineWIP"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:id="@+id/totalStyleInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView20"
+        android:layout_alignLeft="@id/textView20"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="Total Input" />
+
+    <TextView
+        android:id="@+id/totalStyleOutput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/totalStyleInput"
+        android:layout_alignLeft="@id/textView20"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="Total Output" />
 
 </RelativeLayout>

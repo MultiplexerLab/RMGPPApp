@@ -18,45 +18,50 @@
             android:id="@+id/processName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:text="Process Name"
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:layout_weight="2" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/machineType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:inputType="textMultiLine"
             android:text="Machine Type"
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:inputType="textMultiLine"
-            android:layout_weight="0.75" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/hourlyTarget"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.75"
             android:text="Hourly\nTarget"
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:layout_weight="0.75" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/workerId"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1.25"
             android:text="Assign\nWorker Id"
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:layout_weight="1.25"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <ListView
+    <!--<ListView
         android:id="@+id/listViewProcess"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.9"></ListView>
+        android:layout_weight="0.9"></ListView>-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewProcess"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.9"></android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"

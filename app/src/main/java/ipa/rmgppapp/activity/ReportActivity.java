@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,10 +22,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import de.codecrafters.tableview.TableView;
+import de.codecrafters.tableview.listeners.OnScrollListener;
 import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.helper.Endpoints;
 import ipa.rmgppapp.model.PlanningData;
@@ -36,12 +39,14 @@ public class ReportActivity extends AppCompatActivity {
     RequestQueue queue;
     ArrayList<PlanningData> planningDataArrayList;
     ArrayList<String[]> tableData;
+    TableView tableView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
+        tableView = findViewById(R.id.tableViewReport);
         queue = Volley.newRequestQueue(this);
         planningDataArrayList = new ArrayList<>();
         tableData = new ArrayList<>();
@@ -80,13 +85,14 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     public void setTableData() {
-        final TableView tableView = findViewById(R.id.tableViewReport);
+        tableView = findViewById(R.id.tableViewReport);
         TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(this, 7, 100);
-        columnModel1.setColumnWidth(0, 70);
+        columnModel1.setColumnWidth(0, 60);
         columnModel1.setColumnWidth(2, 180);
         columnModel1.setColumnWidth(3, 150);
         columnModel1.setColumnWidth(4, 150);
         columnModel1.setColumnWidth(6, 120);
+
         tableView.setColumnModel(columnModel1);
 
         tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(this, TABLE_HEADERS));
@@ -105,14 +111,19 @@ public class ReportActivity extends AppCompatActivity {
                 editor.putString("styleNo", planningDataArrayList.get(rowIndex).getStyle());
                 editor.commit();
 
-                try {
+                if (description.isEmpty()) {
+                    Toast.makeText(ReportActivity.this, "You have to choose a style!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(ReportActivity.this, ProductionActivity.class);
+                    startActivity(intent);
+                }
+                /*try {
                     LinearLayout linearLayout = findViewById(R.id.rootLayoutReport);
                     //tableView.getDataAdapter().getView(rowIndex, null, linearLayout).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                    //tableView.getDataAdapter().getCellView(rowIndex, 2, linearLayout).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                    //tableView.getDataAdapter().notifyDataSetChanged();
+                    tableView.getDataAdapter().notifyDataSetChanged();
                 }catch (Exception e){
                     Log.e("tableDataErr", e.toString());
-                }
+                }*/
             }
         });
     }
@@ -135,5 +146,11 @@ public class ReportActivity extends AppCompatActivity {
     public void addStyle(View view) {
         Intent intent = new Intent(ReportActivity.this, AddNewStyle.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume(){
+        tableView.getDataAdapter().notifyDataSetChanged();
+        super.onResume();
     }
 }

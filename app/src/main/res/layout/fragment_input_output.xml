@@ -5,12 +5,18 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-
     <Spinner
         android:id="@+id/spinnerTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Working Hour" />
+
+    <EditText
+        android:id="@+id/hourlyLineTarget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:hint="Line Target"/>
 
     <EditText
         android:id="@+id/editTextInput"
@@ -26,11 +32,17 @@
         android:inputType="number"
         android:hint="Line output" />
 
-    <EditText
-        android:id="@+id/editTextProblemType"
+    <Spinner
+        android:id="@+id/problemTypeSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Problem Type" />
+        android:hint="Problem Type"></Spinner>
+
+    <Spinner
+        android:id="@+id/problemsSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Problem"></Spinner>
 
     <EditText
         android:id="@+id/editTextStatus"

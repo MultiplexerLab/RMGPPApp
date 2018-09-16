@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,11 +18,19 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,9 +44,14 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class LineEntryFragment extends Fragment {
 
-    String times[] = {"9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm"};
+    ArrayList<String> problems;
+    String times[] = {"Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10"};
     Button saveHourlyEntry;
-    EditText editTextInput, editTextOutput, editTextProblemType, editTextStatus;
+    EditText hourlyLineTarget, editTextInput, editTextOutput, editTextStatus;
+    Spinner problemTypeSpinner, problemsSpinner;
+    String problemTypes[] = {"Choose a problem Type", "Input", "Maintenance", "Quality", "Production"};
+    ArrayAdapter<String> adapter;
+    boolean flag = false;
 
     public LineEntryFragment(){
 
@@ -50,25 +64,103 @@ public class LineEntryFragment extends Fragment {
         spinnerTime.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, times));
         editTextInput = customView.findViewById(R.id.editTextInput);
         editTextOutput = customView.findViewById(R.id.editTextOutput);
-        editTextProblemType = customView.findViewById(R.id.editTextProblemType);
         editTextStatus = customView.findViewById(R.id.editTextStatus);
-
+        problemTypeSpinner = customView.findViewById(R.id.problemTypeSpinner);
+        problemsSpinner = customView.findViewById(R.id.problemsSpinner);
         saveHourlyEntry = customView.findViewById(R.id.saveHourlyEntry);
+        hourlyLineTarget = customView.findViewById(R.id.hourlyLineTarget);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
         final String styleNo = sharedPreferences.getString("styleNo", "");
 
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String currentDate = df.format(new Date()).toString();
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_LINE_DATA_URL+"?styleNo="+styleNo+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.i("responseLineData", response.toString());
+                try {
+                    JSONObject jsonObject = response.getJSONObject(0);
+                    hourlyLineTarget.setText(jsonObject.getString("lineTarget"));
+                } catch (JSONException e) {
+                    Log.e("JSONLineDataErr", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("LineDataErr", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
+
+        spinnerTime.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, times));
+
+        problems = new ArrayList<>();
+        problems.add("Choose a Problem");
+
+        problemTypeSpinner.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, problemTypes));
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, problems);
+        problemsSpinner.setAdapter(adapter);
+
+        problemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                flag = true;
+                getProblemData(problemTypes[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         saveHourlyEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date date = new Date();
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String requiredDate = df.format(new Date()).toString();
+                String problemType = "", problem = "";
+
+                if(flag){
+                    if(!problemTypeSpinner.getSelectedItem().toString().contains("Choose")) {
+                        problemType = problemTypeSpinner.getSelectedItem().toString();
+                        problem = problemsSpinner.getSelectedItem().toString();
+                    }
+                }
                 LineEntry lineEntry = new LineEntry(spinnerTime.getSelectedItem().toString(), editTextInput.getText().toString(),
-                        editTextOutput.getText().toString(), editTextProblemType.getText().toString(), editTextStatus.getText().toString(),
-                        styleNo, date.toString());
+                        editTextOutput.getText().toString(), problemType, problem, editTextStatus.getText().toString(),
+                        styleNo, requiredDate);
                 saveLineEntry(lineEntry);
             }
         });
         return customView;
+    }
+
+    public void getProblemData(String problemType) {
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PROBLEM_DATA_URL + "?problemType=" + problemType, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        String problem = response.getJSONObject(i).getString("Problem");
+                        problems.add(problem);
+                        adapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        queue.add(jsonArrayRequest);
     }
 
     private void saveLineEntry(final LineEntry obj) {

@@ -24,14 +24,14 @@
             android:textStyle="bold" />
 
         <Button
-             android:layout_width="0dp"
-             android:layout_height="wrap_content"
-             android:layout_weight="4"
-             android:background="@color/colorPrimary"
-             android:onClick="addStyle"
-             android:text="Add New Style"
-             android:textColor="@color/textColor"
-             android:visibility="visible" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:background="@color/colorPrimary"
+            android:onClick="addStyle"
+            android:text="Add New Style"
+            android:textColor="@color/textColor"
+            android:visibility="visible" />
     </LinearLayout>
 
     <HorizontalScrollView
@@ -41,15 +41,17 @@
         <de.codecrafters.tableview.TableView xmlns:table="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tableViewReport"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            table:tableView_columnCount="7" />
+            android:layout_height="400dp"
+            table:tableView_columnCount="7"
+            table:tableView_headerColor="@color/colorPrimary" />
     </HorizontalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:visibility="invisible">
 
         <Button
             android:layout_width="0dp"

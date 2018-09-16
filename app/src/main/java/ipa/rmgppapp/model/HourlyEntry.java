@@ -5,18 +5,22 @@ public class HourlyEntry {
     private String workerId;
     private String workerName;
     private String processName;
+    private String problemType;
+    private String problem;
     /*private String cuttingSlStart;
     private String cuttingSlEnd;*/
     private int quantity;
     private String entryTime;
 
-    public HourlyEntry(String timeStamp, String workerId, String workerName, String processName, int quantity, String entryTime) {
+    public HourlyEntry(String timeStamp, String workerId, String workerName, String processName, int quantity, String entryTime, String problemType, String problem) {
         this.timeStamp = timeStamp;
         this.workerId = workerId;
         this.workerName = workerName;
         this.processName = processName;
         this.quantity = quantity;
         this.entryTime = entryTime;
+        this.problemType = problemType;
+        this.problem = problem;
     }
 
     public String getTimeStamp() {

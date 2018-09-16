@@ -81,12 +81,12 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
-
-                        for(int i=0; i<jsonArray.length(); i++){
+                        Log.i("LineData", jsonArray.toString());
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             try {
                                 lineData.add(jsonArray.getJSONObject(i).getString("line"));
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                                Log.e("LineDataErr", e.toString());
                             }
                             adapter.notifyDataSetChanged();
                         }
@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
     private void checkValidSupervisor(final String supervisorId, final String lineNo) {
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Endpoints.CHECK_SUPERVISOR_URL+"?supervisorId="+supervisorId, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Endpoints.CHECK_SUPERVISOR_URL + "?supervisorId=" + supervisorId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.contains("SUCCESS")) {
@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(LoginActivity.this, ReportActivity.class);
                     startActivity(intent);
-                }else{
+                } else {
                     Toast.makeText(LoginActivity.this, "You are not a valid supervisor!", Toast.LENGTH_SHORT).show();
                 }
             }
