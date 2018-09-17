@@ -40,7 +40,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void newReport(View view) {
-        Intent intent = new Intent(DashboardActivity.this, ReportActivity.class);
+        Intent intent = new Intent(DashboardActivity.this, StyleListActivity.class);
         startActivity(intent);
     }
 

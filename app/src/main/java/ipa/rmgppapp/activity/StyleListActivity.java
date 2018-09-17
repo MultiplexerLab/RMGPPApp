@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,17 +20,15 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import de.codecrafters.tableview.TableView;
-import de.codecrafters.tableview.listeners.OnScrollListener;
 import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
-import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.helper.Endpoints;
 import ipa.rmgppapp.model.PlanningData;
 
-public class ReportActivity extends AppCompatActivity {
+public class StyleListActivity extends AppCompatActivity {
 
     private static final String[] TABLE_HEADERS = {"SL No", "Buyer", "Style", "Item", "Order", "Quantity", "Ship Date"};
 
@@ -57,13 +53,13 @@ public class ReportActivity extends AppCompatActivity {
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PLANNING_DATA_URL + "?lineNo=" + lineNo, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONArray response) {
-                Log.i("response", response.toString());
+            public void onResponse(JSONArray jsonArray) {
+                Log.i("response", jsonArray.toString());
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<List<PlanningData>>() {
                     }.getType();
-                    planningDataArrayList = gson.fromJson(response.toString(), type);
+                    planningDataArrayList = gson.fromJson(jsonArray.toString(), type);
 
                     for (int i = 0; i < planningDataArrayList.size(); i++) {
                         PlanningData obj = planningDataArrayList.get(i);
@@ -91,7 +87,7 @@ public class ReportActivity extends AppCompatActivity {
         columnModel1.setColumnWidth(2, 180);
         columnModel1.setColumnWidth(3, 150);
         columnModel1.setColumnWidth(4, 150);
-        columnModel1.setColumnWidth(6, 120);
+        columnModel1.setColumnWidth(6, 150);
 
         tableView.setColumnModel(columnModel1);
 
@@ -112,39 +108,18 @@ public class ReportActivity extends AppCompatActivity {
                 editor.commit();
 
                 if (description.isEmpty()) {
-                    Toast.makeText(ReportActivity.this, "You have to choose a style!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StyleListActivity.this, "You have to choose a style!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(ReportActivity.this, ProductionActivity.class);
+                    Intent intent = new Intent(StyleListActivity.this, ProductionActivity.class);
                     startActivity(intent);
                 }
-                /*try {
-                    LinearLayout linearLayout = findViewById(R.id.rootLayoutReport);
-                    //tableView.getDataAdapter().getView(rowIndex, null, linearLayout).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                    tableView.getDataAdapter().notifyDataSetChanged();
-                }catch (Exception e){
-                    Log.e("tableDataErr", e.toString());
-                }*/
             }
         });
     }
 
-    public void cancelReport(View view) {
-        finish();
-    }
-
-    public void continueReport(View view) {
-        SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
-        String description = sharedPreferences.getString("description", "");
-        if (description.isEmpty()) {
-            Toast.makeText(this, "You have to choose a style!", Toast.LENGTH_SHORT).show();
-        } else {
-            Intent intent = new Intent(ReportActivity.this, ProductionActivity.class);
-            startActivity(intent);
-        }
-    }
 
     public void addStyle(View view) {
-        Intent intent = new Intent(ReportActivity.this, AddNewStyle.class);
+        Intent intent = new Intent(StyleListActivity.this, AddNewStyle.class);
         startActivity(intent);
     }
 

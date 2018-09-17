@@ -13,18 +13,10 @@ public class PlanningData {
         this.buyer = buyer;
         this.style = style;
         this.item = item;
+        this.description = description;
         this.orderNo = orderNo;
         this.shipmentData = shipmentData;
         this.plannedQuantity = plannedQuantity;
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getBuyer() {
@@ -49,6 +41,14 @@ public class PlanningData {
 
     public void setItem(String item) {
         this.item = item;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getOrderNo() {

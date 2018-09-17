@@ -196,6 +196,39 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
                 }
             }
         });
+
+        holder.hourlyTarget.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!holder.hourlyTarget.getText().toString().isEmpty() && holder.hourlyTarget.getText().toString().length() > 1) {
+                    try {
+                        if(!holder.hourlyTarget.getText().toString().isEmpty()) {
+                            Log.i("Dhukse", "Dhukse");
+                            Worker worker = getWorkerInfo(holder.workerIdView.getText().toString());
+                            processItemArrayList.remove(position);
+                            processItemArrayList.add(position, new ProcessItem(processItem.getId(), processItem.getProcessName(), processItem.getMachineType(), new Double(Math.round(Integer.parseInt(holder.hourlyTarget.getText().toString()))),
+                                    holder.workerIdView.getText().toString(), worker.getName()));
+                            assignedWorkerData.add(new ProcessItem(processItem.getId(), processItem.getProcessName(), processItem.getMachineType(), new Double(Math.round(Integer.parseInt(holder.hourlyTarget.getText().toString()))),
+                                    holder.workerIdView.getText().toString(), worker.getName()));
+                        }
+                    } catch (Exception e) {
+                        Log.e("ArrayListErr", e.toString());
+                    }
+                } else {
+                    Toast.makeText(context, "Please enter some value", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override

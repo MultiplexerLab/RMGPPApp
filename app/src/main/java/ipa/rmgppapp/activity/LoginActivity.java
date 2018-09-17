@@ -1,6 +1,5 @@
 package ipa.rmgppapp.activity;
 
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,15 +25,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.helper.Endpoints;
@@ -139,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("lineNo", lineNo);
                     editor.commit();
 
-                    Intent intent = new Intent(LoginActivity.this, ReportActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, StyleListActivity.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(LoginActivity.this, "You are not a valid supervisor!", Toast.LENGTH_SHORT).show();

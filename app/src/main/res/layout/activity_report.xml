@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.ReportActivity">
+    tools:context=".activity.StyleListActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,46 +41,9 @@
         <de.codecrafters.tableview.TableView xmlns:table="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tableViewReport"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="450dp"
             table:tableView_columnCount="7"
             table:tableView_headerColor="@color/colorPrimary" />
     </HorizontalScrollView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:visibility="invisible">
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="Extra"
-            android:visibility="gone" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="0.5"
-            android:background="@color/redButton"
-            android:onClick="cancelReport"
-            android:text="Exit"
-            android:textColor="@color/textColor" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="0.5"
-            android:background="@color/colorPrimary"
-            android:onClick="continueReport"
-            android:text="Continue"
-            android:textColor="@color/textColor" />
-    </LinearLayout>
 
 </LinearLayout>

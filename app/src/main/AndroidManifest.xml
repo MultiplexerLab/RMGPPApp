@@ -26,8 +26,8 @@
             android:name=".activity.DashboardActivity"
             android:label="Dashboard" />
         <activity
-            android:name=".activity.ReportActivity"
-            android:label="Report" />
+            android:name=".activity.StyleListActivity"
+            android:label="Style List" />
         <activity
             android:name=".activity.AddNewStyle"
             android:label="Add New Style" />

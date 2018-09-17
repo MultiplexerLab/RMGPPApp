@@ -1,6 +1,5 @@
 package ipa.rmgppapp.activity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,11 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import ipa.rmgppapp.R;
@@ -171,7 +167,7 @@ public class AddNewStyle extends AppCompatActivity {
             public void onResponse(String response) {
                 Log.i("NewStyle", response.toString());
                 if(response.contains("SUCCESS")) {
-                    Intent intent = new Intent(AddNewStyle.this, ReportActivity.class);
+                    Intent intent = new Intent(AddNewStyle.this, StyleListActivity.class);
                     startActivity(intent);
                 }else{
                     Toast.makeText(AddNewStyle.this, "Server Problem!", Toast.LENGTH_SHORT).show();
