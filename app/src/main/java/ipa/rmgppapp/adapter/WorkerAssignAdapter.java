@@ -102,7 +102,6 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
             @Override
             protected Map<String, String> getParams() {
                 String jsonArrayString = "";
-
                 try {
                     GsonBuilder gsonBuilder = new GsonBuilder();
                     Gson gson = gsonBuilder.create();
@@ -139,6 +138,7 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
             machineType = view.findViewById(R.id.machineTypeItem);
             hourlyTarget = view.findViewById(R.id.hourlyTargetItem);
 
+            Log.i("workerIdList", workerIdList.toString());
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                     android.R.layout.simple_dropdown_item_1line, workerIdList);
             workerIdView = (AutoCompleteTextView)
@@ -234,5 +234,10 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
     @Override
     public int getItemCount() {
         return processItemArrayList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }

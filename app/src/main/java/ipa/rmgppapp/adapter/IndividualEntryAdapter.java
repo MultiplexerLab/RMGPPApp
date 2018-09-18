@@ -91,12 +91,13 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                             for (int i = 0; i < response.length(); i++) {
                                 try {
                                     String problem = response.getJSONObject(i).getString("Problem");
+                                    Log.i("problem", problem);
                                     problems.add(problem);
-                                    adapter.notifyDataSetChanged();
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    Log.e("ProblemLoadingErr", e.toString());
                                 }
                             }
+                            adapter.notifyDataSetChanged();
                         }
                     }, new Response.ErrorListener() {
                         @Override

@@ -21,13 +21,15 @@
         </activity>
         <activity
             android:name=".activity.LoginActivity"
-            android:label="Login" />
+            android:label="Login"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".activity.DashboardActivity"
             android:label="Dashboard" />
         <activity
             android:name=".activity.StyleListActivity"
-            android:label="Style List" />
+            android:label="Style List"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".activity.AddNewStyle"
             android:label="Add New Style" />
@@ -36,7 +38,8 @@
             android:label="Saved Report" />
         <activity
             android:name=".activity.WorkerAssignActivity"
-            android:label="Assign Workers" />
+            android:label="Assign Workers"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".activity.ProductionActivity"
             android:label="Production Report"

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -24,7 +25,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.codecrafters.tableview.TableView;
@@ -48,12 +52,9 @@ public class HourlyReportFragment extends Fragment {
     }
     ArrayList<String[]> tableData;
     private static final String[] TABLE_HEADERS = { "Worker\nName" , "Worker\nId","Process\nName", "Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10", "Total"};
-    /*private static final String[][] DATA_TO_SHOW = { {"Abul Kashem", "W123", "Neck Join", "89", "88", "98", "95", "97", "92"},
-            {"Fatema Jahan", "W124", "Neck Join", "89", "88", "98", "95", "97", "92"},
-            {"Morjina Khatun", "W126", "Side Join", "89", "88", "98", "95", "96", "94"},
-            {"Habib", "W129", "Ham Join", "89", "88", "88", "85", "97", "99"},};*/
     TableView tableView;
     String prevId="";
+    Button buttonRefreshHourlyReport;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +62,7 @@ public class HourlyReportFragment extends Fragment {
 
         View customView = inflater.inflate(R.layout.fragment_hourly_report, container, false);
         tableView = (TableView) customView.findViewById(R.id.tableView);
+        buttonRefreshHourlyReport = customView.findViewById(R.id.buttonRefreshHourlyReport);
 
         tableData = new ArrayList<>();
 
@@ -78,24 +80,34 @@ public class HourlyReportFragment extends Fragment {
             public void run() {
                 Log.i("tableData", tableData.toString());
                 try {
-                    tableView.setDataAdapter(new SimpleTableDataAdapter(getActivity(), tableData));
-                    tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(getActivity(), TABLE_HEADERS));
+                    setTableData();
                 }catch (Exception e){
                     Log.e("tableDataErr", e.toString());
                 }
             }
         }, 3000);
 
+        buttonRefreshHourlyReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getTableData();
+                setTableData();
+            }
+        });
         return customView;
+    }
+
+    private void setTableData() {
+        tableView.setDataAdapter(new SimpleTableDataAdapter(getActivity(), tableData));
+        tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(getActivity(), TABLE_HEADERS));
     }
 
     private void getTableData() {
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
-
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
         String tag = sharedPreferences.getString("description", "");
-
         Log.i("TagGet", tag);
+
         JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -104,11 +116,13 @@ public class HourlyReportFragment extends Fragment {
                 }.getType();
                 Log.i("DataAssignedWorker", response.toString());
                 final ArrayList<ProcessItem> processItems = gson.fromJson(response.toString(), type);
-
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String currentDate = df.format(new Date()).toString();
+                tableData.clear();
                 for(int i=0; i<processItems.size(); i++){
                     final String workerId = processItems.get(i).getAssignedWorkerId();
                     final int finalI = i;
-                    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_HOURLY_RECORD_DATA + "?workerId=" + workerId, new Response.Listener<JSONArray>() {
+                    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_HOURLY_RECORD_DATA + "?workerId=" + workerId+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
                                 String arr[] = new String[14];

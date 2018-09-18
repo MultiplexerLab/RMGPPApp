@@ -40,13 +40,19 @@ public class StyleListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_report);
+        setContentView(R.layout.activity_stylelist);
 
         tableView = findViewById(R.id.tableViewReport);
         queue = Volley.newRequestQueue(this);
         planningDataArrayList = new ArrayList<>();
         tableData = new ArrayList<>();
 
+        getStyles();
+    }
+
+    private void getStyles() {
+        planningDataArrayList.clear();
+        tableData.clear();
         SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
         final String lineNo = sharedPreferences.getString("lineNo", "");
         Log.i("lineNo", lineNo);
@@ -100,10 +106,10 @@ public class StyleListActivity extends AppCompatActivity {
             public void onDataClicked(int rowIndex, Object clickedData) {
                 String description = planningDataArrayList.get(rowIndex).getDescription();
                 String temp[] = description.split(" ");
-                Log.i("descriptionTag", temp[0]);
+                Log.i("descriptionTag", description);
 
                 SharedPreferences.Editor editor = getSharedPreferences("supervisor", MODE_PRIVATE).edit();
-                editor.putString("description", temp[0]);
+                editor.putString("description", description);
                 editor.putString("styleNo", planningDataArrayList.get(rowIndex).getStyle());
                 editor.commit();
 
@@ -127,5 +133,9 @@ public class StyleListActivity extends AppCompatActivity {
     public void onResume(){
         tableView.getDataAdapter().notifyDataSetChanged();
         super.onResume();
+    }
+
+    public void refreshStyles(View view) {
+        getStyles();
     }
 }

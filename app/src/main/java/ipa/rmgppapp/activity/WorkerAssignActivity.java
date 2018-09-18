@@ -1,7 +1,9 @@
 package ipa.rmgppapp.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -61,14 +63,8 @@ public class WorkerAssignActivity extends AppCompatActivity {
         processItemArrayList = new ArrayList<>();
         workerList = new ArrayList<>();
         workerIdList = new ArrayList<>();
-        getAllWorkerId();
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setData();
-            }
-        }, 5000);
+        AsyncGetWorkerData workerData = new AsyncGetWorkerData();
+        workerData.execute();
     }
 
     private void setData() {
@@ -84,8 +80,7 @@ public class WorkerAssignActivity extends AppCompatActivity {
                 Type type = new TypeToken<List<ProcessItem>>() {
                 }.getType();
                 processItemArrayList = gson.fromJson(response.toString(), type);
-                /*adapter = new WorkerAssignAdapter(WorkerAssignActivity.this, processItemArrayList, workerList, workerIdList);
-                listViewProcess.setAdapter(adapter);*/
+                Log.i("workerListPrev", workerIdList.toString());
                 adapter = new WorkerAssignAdapter(WorkerAssignActivity.this, processItemArrayList, workerList, workerIdList);
                 mRecyclerView.setAdapter(adapter);
             }
@@ -139,5 +134,57 @@ public class WorkerAssignActivity extends AppCompatActivity {
     public void continueWorkerAssign(View view) {
         adapter.saveData();
         finish();
+    }
+
+    public void refreshData(View view) {
+        AsyncGetWorkerData workerData = new AsyncGetWorkerData();
+        workerData.execute();
+    }
+
+    private class AsyncGetProcessData extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog;
+        @Override
+        protected String doInBackground(String... params) {
+            publishProgress("Data is Loading...");
+            setData();
+            return "";
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+        }
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(WorkerAssignActivity.this,
+                    "ProgressDialog",
+                    "Wait for a few moments");
+        }
+    }
+
+    private class AsyncGetWorkerData extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog;
+        @Override
+        protected String doInBackground(String... params) {
+            publishProgress("Data is Loading...");
+            getAllWorkerId();
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            AsyncGetProcessData process = new AsyncGetProcessData();
+            process.execute();
+        }
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(WorkerAssignActivity.this,
+                    "ProgressDialog",
+                    "Wait for a few moments");
+        }
     }
 }

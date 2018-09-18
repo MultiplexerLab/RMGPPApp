@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getSpinnerData() {
+        lineData.clear();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PLANNED_LINE_URL,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -182,5 +183,9 @@ public class LoginActivity extends AppCompatActivity {
                 showSnackBar();
             }
         }
+    }
+
+    public void refreshLines(View view) {
+        getSpinnerData();
     }
 }
