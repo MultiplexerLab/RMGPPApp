@@ -170,6 +170,8 @@ public class LineEntryFragment extends Fragment {
             public void onResponse(String response) {
                 if(response.contains("SUCCESS")){
                     Toast.makeText(getActivity(), "Data is saved!", Toast.LENGTH_SHORT).show();
+                    problemTypeSpinner.setSelection(0);
+                    problemsSpinner.setSelection(0);
                 }
             }
         }, new Response.ErrorListener() {

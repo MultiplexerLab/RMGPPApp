@@ -29,7 +29,6 @@
                     android:layout_marginRight="5dp"
                     android:background="#65ef87"/>
 
-
                 <Button
                     android:id="@+id/buttonLineInput"
                     android:layout_width="wrap_content"

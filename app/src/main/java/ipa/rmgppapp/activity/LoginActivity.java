@@ -10,6 +10,8 @@ import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -58,7 +60,25 @@ public class LoginActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
 
         if (internetConnected()) {
-            getSpinnerData();
+            getSpinnerData(eTSuperVisorId.getText().toString());
+            /*eTSuperVisorId.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if(!eTSuperVisorId.getText().toString().isEmpty() && eTSuperVisorId.getText().toString().length()>2){
+                        getSpinnerData(eTSuperVisorId.getText().toString());
+                    }
+                }
+            });*/
             if (snackbar != null) {
                 if (snackbar.isShown()) {
                     snackbar.dismiss();
@@ -71,9 +91,9 @@ public class LoginActivity extends AppCompatActivity {
         spinnerLine.setAdapter(adapter);
     }
 
-    private void getSpinnerData() {
+    private void getSpinnerData(String superVisorId) {
         lineData.clear();
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PLANNED_LINE_URL,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PLANNED_LINE_URL+"?superVisorId="+superVisorId,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
@@ -156,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             return true;
         } else {
-            return false;
+            return true;
         }
     }
 
@@ -178,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 9003) {
             if (internetConnected()) {
-                getSpinnerData();
+                getSpinnerData(eTSuperVisorId.getText().toString());
             } else {
                 showSnackBar();
             }
@@ -186,6 +206,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void refreshLines(View view) {
-        getSpinnerData();
+        getSpinnerData(eTSuperVisorId.getText().toString());
     }
 }
