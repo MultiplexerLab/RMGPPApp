@@ -88,7 +88,7 @@ public class ProductionActivity extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String currentDate = df.format(new Date()).toString();
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_LINE_DATA_URL+"?styleNo="+styleNo+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.CHECK_LINE_TARGET_URL+"?styleNo="+styleNo+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.i("responseLineData", response.toString());
