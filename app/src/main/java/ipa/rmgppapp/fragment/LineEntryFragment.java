@@ -1,5 +1,6 @@
 package ipa.rmgppapp.fragment;
 
+import android.app.VoiceInteractor;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -52,6 +54,9 @@ public class LineEntryFragment extends Fragment {
     String problemTypes[] = {"Choose a problem Type", "Input", "Maintenance", "Quality", "Production"};
     ArrayAdapter<String> adapter;
     boolean flag = false;
+    ListView listViewLineData;
+    ArrayList<String> arrayListLineData;
+    ArrayAdapter<String> adapterLineData;
 
     public LineEntryFragment(){
 
@@ -69,6 +74,12 @@ public class LineEntryFragment extends Fragment {
         problemsSpinner = customView.findViewById(R.id.problemsSpinner);
         saveHourlyEntry = customView.findViewById(R.id.saveHourlyEntry);
         hourlyLineTarget = customView.findViewById(R.id.hourlyLineTarget);
+        listViewLineData = customView.findViewById(R.id.listViewLineData);
+
+        arrayListLineData = new ArrayList<>();
+        getLineData();
+        adapterLineData = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrayListLineData);
+        listViewLineData.setAdapter(adapterLineData);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
         final String styleNo = sharedPreferences.getString("styleNo", "");
@@ -76,7 +87,7 @@ public class LineEntryFragment extends Fragment {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String currentDate = df.format(new Date()).toString();
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_LINE_DATA_URL+"?styleNo="+styleNo+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.CHECK_LINE_TARGET_URL+"?styleNo="+styleNo+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.i("responseLineData", response.toString());
@@ -201,5 +212,39 @@ public class LineEntryFragment extends Fragment {
             }
         };
         queue.add(stringRequest);
+    }
+
+    public void getLineData(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
+        final String styleNo = sharedPreferences.getString("styleNo", "");
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String currentDate = df.format(new Date()).toString();
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_LINE_RECORD+"?styleNo="+styleNo+
+                "&entryTime="+currentDate, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for(int i=0; i<response.length(); i++){
+                    try {
+                        String data = "Hour: "+response.getJSONObject(i).getString("hour")+
+                                "\nOutput: "+response.getJSONObject(i).getString("output")+
+                                "\nProblem Type: "+response.getJSONObject(i).getString("problemType")+
+                                "\nProblem: "+response.getJSONObject(i).getString("problem")+
+                                "\nStatus: "+response.getJSONObject(i).getString("status");
+                        arrayListLineData.add(data);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        queue.add(jsonArrayRequest);
     }
 }

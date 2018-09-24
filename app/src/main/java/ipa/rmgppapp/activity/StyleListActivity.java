@@ -12,6 +12,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.listeners.TableDataClickListener;
+import de.codecrafters.tableview.listeners.TableDataLongClickListener;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
@@ -121,6 +123,34 @@ public class StyleListActivity extends AppCompatActivity {
                 }
             }
         });
+
+        tableView.addDataLongClickListener(new TableDataLongClickListener() {
+            @Override
+            public boolean onDataLongClicked(int rowIndex, Object clickedData) {
+                SharedPreferences preferences = getSharedPreferences("supervisor", MODE_PRIVATE);
+
+                PlanningData planningData = planningDataArrayList.get(rowIndex);
+                deleteStyleFromPlanning(preferences.getString("lineNo", ""), planningData.getStyle());
+                return false;
+            }
+        });
+    }
+
+    private void deleteStyleFromPlanning(String lineNo, String style) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, Endpoints.DELETE_STYLE_URL+"?lineNo="+lineNo+"styleNo="+style, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                getStyles();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        queue.add(stringRequest);
     }
 
 
