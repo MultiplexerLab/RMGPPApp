@@ -44,8 +44,8 @@
         android:layout_height="wrap_content"
         android:hint="Problem"></Spinner>
 
-    <EditText
-        android:id="@+id/editTextStatus"
+    <Spinner
+        android:id="@+id/spinnerStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Status" />

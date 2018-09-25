@@ -91,7 +91,7 @@ public class HourlyReportFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getTableData();
-                setTableData();
+                //setTableData();
             }
         });
         return customView;
@@ -185,6 +185,7 @@ public class HourlyReportFragment extends Fragment {
                         queue.add(jsonArrayRequest);
                         prevId = workerId;
                     }
+                    setTableData();
             }
         }, new Response.ErrorListener() {
             @Override

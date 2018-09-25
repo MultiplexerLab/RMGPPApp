@@ -46,11 +46,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class LineEntryFragment extends Fragment {
 
-    ArrayList<String> problems;
+    ArrayList<String> problems, statusList;
     String times[] = {"Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10"};
     Button saveHourlyEntry;
-    EditText hourlyLineTarget, editTextInput, editTextOutput, editTextStatus;
-    Spinner problemTypeSpinner, problemsSpinner;
+    EditText hourlyLineTarget, editTextInput, editTextOutput;
+    Spinner problemTypeSpinner, problemsSpinner, statusSpinner;
     String problemTypes[] = {"Choose a problem Type", "Input", "Maintenance", "Quality", "Production"};
     ArrayAdapter<String> adapter;
     boolean flag = false;
@@ -69,15 +69,18 @@ public class LineEntryFragment extends Fragment {
         spinnerTime.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, times));
         editTextInput = customView.findViewById(R.id.editTextInput);
         editTextOutput = customView.findViewById(R.id.editTextOutput);
-        editTextStatus = customView.findViewById(R.id.editTextStatus);
         problemTypeSpinner = customView.findViewById(R.id.problemTypeSpinner);
         problemsSpinner = customView.findViewById(R.id.problemsSpinner);
+        statusSpinner = customView.findViewById(R.id.spinnerStatus);
         saveHourlyEntry = customView.findViewById(R.id.saveHourlyEntry);
         hourlyLineTarget = customView.findViewById(R.id.hourlyLineTarget);
         listViewLineData = customView.findViewById(R.id.listViewLineData);
 
         arrayListLineData = new ArrayList<>();
+        statusList = new ArrayList<>();
+
         getLineData();
+
         adapterLineData = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrayListLineData);
         listViewLineData.setAdapter(adapterLineData);
 
@@ -115,6 +118,12 @@ public class LineEntryFragment extends Fragment {
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, problems);
         problemsSpinner.setAdapter(adapter);
 
+        ArrayAdapter adapterStatus = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, statusList);
+        statusList.add("Choose a status");
+        statusList.add("Resolved");
+        statusList.add("Not Resolved");
+        statusSpinner.setAdapter(adapterStatus);
+
         problemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -133,7 +142,7 @@ public class LineEntryFragment extends Fragment {
             public void onClick(View view) {
                 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 String requiredDate = df.format(new Date()).toString();
-                String problemType = "", problem = "";
+                String problemType = "", problem = "", status = "";
 
                 if(flag){
                     if(!problemTypeSpinner.getSelectedItem().toString().contains("Choose")) {
@@ -141,8 +150,11 @@ public class LineEntryFragment extends Fragment {
                         problem = problemsSpinner.getSelectedItem().toString();
                     }
                 }
+                if(!statusSpinner.getSelectedItem().toString().contains("Choose")) {
+                    status = statusSpinner.getSelectedItem().toString();
+                }
                 LineEntry lineEntry = new LineEntry(spinnerTime.getSelectedItem().toString(), editTextInput.getText().toString(),
-                        editTextOutput.getText().toString(), problemType, problem, editTextStatus.getText().toString(),
+                        editTextOutput.getText().toString(), problemType, problem, status,
                         styleNo, requiredDate);
                 saveLineEntry(lineEntry);
             }
@@ -228,9 +240,9 @@ public class LineEntryFragment extends Fragment {
                 for(int i=0; i<response.length(); i++){
                     try {
                         String data = "Hour: "+response.getJSONObject(i).getString("hour")+
-                                "\nOutput: "+response.getJSONObject(i).getString("output")+
+                                ", Output: "+response.getJSONObject(i).getString("output")+
                                 "\nProblem Type: "+response.getJSONObject(i).getString("problemType")+
-                                "\nProblem: "+response.getJSONObject(i).getString("problem")+
+                                ", Problem: "+response.getJSONObject(i).getString("problem")+
                                 "\nStatus: "+response.getJSONObject(i).getString("status");
                         arrayListLineData.add(data);
                     } catch (JSONException e) {
