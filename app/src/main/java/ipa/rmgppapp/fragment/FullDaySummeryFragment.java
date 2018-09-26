@@ -29,11 +29,11 @@ import ipa.rmgppapp.helper.Endpoints;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FullDaySummery extends Fragment {
+public class FullDaySummeryFragment extends Fragment {
 
     TextView lineTargetTotal, lineOutputTotal, totalInput, lineWip, totalStyleInput, totalStyleOutput;
 
-    public FullDaySummery(){
+    public FullDaySummeryFragment(){
 
     }
     @Override

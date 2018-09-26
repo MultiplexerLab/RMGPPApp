@@ -54,9 +54,8 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView workerId, workerName, processName, hourlyTarget;
         EditText hourlyOutput;
-        Spinner spinnerTime;
         Button saveIndividualEntry;
-        Spinner problemTypeSpinner, problemsSpinner;
+        Spinner spinnerTime, problemTypeSpinner, problemsSpinner;
         boolean flag = false;
 
         public MyViewHolder(View view) {
@@ -77,6 +76,7 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
             problems.add("Choose a Problem");
 
             problemTypeSpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, problemTypes));
+
             adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, problems);
             problemsSpinner.setAdapter(adapter);
 
@@ -107,13 +107,11 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                     });
                     queue.add(jsonArrayRequest);
                 }
-
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
 
                 }
             });
-
             saveIndividualEntry.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -121,7 +119,7 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                         Toast.makeText(context, "Insert hourly output!", Toast.LENGTH_SHORT).show();
                     } else {
                         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                        String requiredDate = df.format(new Date()).toString();
+                        String currentDate = df.format(new Date()).toString();
 
                         String problemType = "";
                         String problem = "";
@@ -134,33 +132,13 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                         }
                         //int quantity = calculateQuantity(cuttingSlStart.getText().toString(), cuttingSlEnd.getText().toString());
                         HourlyEntry obj = new HourlyEntry(spinnerTime.getSelectedItem().toString(), workerId.getText().toString(), workerName.getText().toString(),
-                                processName.getText().toString(), Integer.parseInt(hourlyOutput.getText().toString()), requiredDate, problemType,
+                                processName.getText().toString(), Integer.parseInt(hourlyOutput.getText().toString()), currentDate, problemType,
                                 problem);
                         saveIndividualEntry(obj);
                     }
                 }
             });
         }
-    }
-
-
-    private int calculateQuantity(String cuttingSlStart, String cuttingSlEnd) {
-        int quantity = 0;
-        String styleNo1 = cuttingSlStart.substring(0, 2);
-        String size1 = cuttingSlStart.substring(3, 3);
-        int quantity1 = Integer.parseInt(cuttingSlStart.substring(4, 6));
-        String styleNo2 = cuttingSlEnd.substring(0, 2);
-        String size2 = cuttingSlEnd.substring(3, 3);
-        int quantity2 = Integer.parseInt(cuttingSlEnd.substring(4, 6));
-
-        if (size1.equals(size2)) {
-            if (quantity1 < quantity2) {
-                quantity = (quantity2 - quantity1) + 1;
-            } else {
-                quantity = (quantity1 - quantity2) + 1;
-            }
-        }
-        return quantity;
     }
 
     private void saveIndividualEntry(final HourlyEntry obj) {

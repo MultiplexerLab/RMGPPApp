@@ -23,8 +23,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +36,7 @@ import java.util.Map;
 
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.adapter.ViewPagerAdapter;
-import ipa.rmgppapp.fragment.FullDaySummery;
+import ipa.rmgppapp.fragment.FullDaySummeryFragment;
 import ipa.rmgppapp.fragment.IndividualEntryFragment;
 import ipa.rmgppapp.fragment.HourlyReportFragment;
 import ipa.rmgppapp.fragment.LineEntryFragment;
@@ -70,7 +68,7 @@ public class ProductionActivity extends AppCompatActivity {
         adapter.addFragments(new IndividualEntryFragment(), "Individual Entry");
         adapter.addFragments(new HourlyReportFragment(), "Hourly Report");
         adapter.addFragments(new LineEntryFragment(), "Line\nEntry");
-        adapter.addFragments(new FullDaySummery(), "Full Day Summery");
+        adapter.addFragments(new FullDaySummeryFragment(), "Full Day Summery");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

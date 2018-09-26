@@ -56,11 +56,7 @@ public class IndividualEntryFragment extends Fragment {
         mRecyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("hourlyEntry", MODE_PRIVATE);
-        String data = sharedPreferences.getString("data", "");
-
         getAssignedWorkerData();
-
         return customView;
     }
 
@@ -78,6 +74,7 @@ public class IndividualEntryFragment extends Fragment {
                 }.getType();
                 Log.i("DataAssignedWorker", response.toString());
                 ArrayList<ProcessItem> processItems = gson.fromJson(response.toString(), type);
+
                 IndividualEntryAdapter adapter = new IndividualEntryAdapter(getActivity(), processItems);
                 mRecyclerView.setAdapter(adapter);
             }
