@@ -1,7 +1,9 @@
 package ipa.rmgppapp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -126,22 +128,44 @@ public class StyleListActivity extends AppCompatActivity {
 
         tableView.addDataLongClickListener(new TableDataLongClickListener() {
             @Override
-            public boolean onDataLongClicked(int rowIndex, Object clickedData) {
-                SharedPreferences preferences = getSharedPreferences("supervisor", MODE_PRIVATE);
+            public boolean onDataLongClicked(final int rowIndex, Object clickedData) {
 
-                PlanningData planningData = planningDataArrayList.get(rowIndex);
-                deleteStyleFromPlanning(preferences.getString("lineNo", ""), planningData.getStyle());
-                return false;
+                AlertDialog.Builder dialog = new AlertDialog.Builder(StyleListActivity.this);
+                dialog.setTitle("Delete a style?").setCancelable(false).setMessage("Do you want to delete this style? If you delete you can not see it anymore!");
+                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPreferences preferences = getSharedPreferences("supervisor", MODE_PRIVATE);
+                        PlanningData planningData = planningDataArrayList.get(rowIndex);
+                        deleteStyleFromPlanning(preferences.getString("lineNo", ""), planningData.getStyle());
+                    }
+                });
+                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                dialog.show();
+                return true;
             }
         });
     }
 
     private void deleteStyleFromPlanning(String lineNo, String style) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, Endpoints.DELETE_STYLE_URL+"?lineNo="+lineNo+"styleNo="+style, new Response.Listener<String>() {
+        String url = Endpoints.DELETE_STYLE_URL+"?styleNo="+style+"&lineNo="+lineNo;
+        Log.i("url", url.toString());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                getStyles();
+                Log.i("Response", response.toString());
+                if(response.contains("DONE")) {
+                    getStyles();
+                    Toast.makeText(StyleListActivity.this, "The style is deleted!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(StyleListActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -149,10 +173,8 @@ public class StyleListActivity extends AppCompatActivity {
 
             }
         });
-
         queue.add(stringRequest);
     }
-
 
     public void addStyle(View view) {
         Intent intent = new Intent(StyleListActivity.this, AddNewStyle.class);

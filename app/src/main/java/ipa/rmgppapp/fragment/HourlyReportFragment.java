@@ -1,6 +1,8 @@
 package ipa.rmgppapp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -38,6 +40,7 @@ import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import ipa.rmgppapp.R;
+import ipa.rmgppapp.activity.WorkerAssignActivity;
 import ipa.rmgppapp.adapter.IndividualEntryAdapter;
 import ipa.rmgppapp.helper.Endpoints;
 import ipa.rmgppapp.model.HourlyReportRow;
@@ -72,26 +75,14 @@ public class HourlyReportFragment extends Fragment {
         columnModel1.setColumnWidth(2, 180);
         tableView.setColumnModel(columnModel1);
 
-        getTableData();
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.i("tableData", tableData.toString());
-                try {
-                    setTableData();
-                }catch (Exception e){
-                    Log.e("tableDataErr", e.toString());
-                }
-            }
-        }, 3000);
+        AsyncGetHourlyReport obj = new AsyncGetHourlyReport();
+        obj.execute();
 
         buttonRefreshHourlyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getTableData();
-                //setTableData();
+                AsyncGetHourlyReport obj = new AsyncGetHourlyReport();
+                obj.execute();
             }
         });
         return customView;
@@ -194,5 +185,25 @@ public class HourlyReportFragment extends Fragment {
             }
         });
         queue.add(stringRequest);
+    }
+
+    private class AsyncGetHourlyReport extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog;
+        @Override
+        protected String doInBackground(String... params) {
+            publishProgress("Data is Loading...");
+            getTableData();
+            return "";
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+        }
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Data is loading",
+                    "Wait for a few moments");
+        }
     }
 }

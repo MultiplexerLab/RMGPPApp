@@ -3,51 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <Spinner
         android:id="@+id/spinnerTime"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:hint="Working Hour" />
 
     <EditText
         android:id="@+id/hourlyLineTarget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:enabled="false"
         android:hint="Line Target"/>
 
     <EditText
         android:id="@+id/editTextInput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:hint="Input"
         android:inputType="number"/>
 
     <EditText
         android:id="@+id/editTextOutput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="number"
         android:hint="Line output" />
 
     <Spinner
         android:id="@+id/problemTypeSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Problem Type"></Spinner>
 
     <Spinner
         android:id="@+id/problemsSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Problem"></Spinner>
 
     <Spinner
         android:id="@+id/spinnerStatus"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Status" />
 
     <Button

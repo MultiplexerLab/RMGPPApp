@@ -1,5 +1,6 @@
 package ipa.rmgppapp.activity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,9 +27,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import ipa.rmgppapp.R;
@@ -61,8 +65,8 @@ public class AddNewStyle extends AppCompatActivity {
 
         getStyleList();
 
-        //myCalendar = Calendar.getInstance();
-        /*final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
@@ -79,7 +83,7 @@ public class AddNewStyle extends AppCompatActivity {
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
-        });*/
+        });
         styleNo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -151,11 +155,11 @@ public class AddNewStyle extends AppCompatActivity {
         queue.add(jsonArrayRequest);
     }
 
-    /*private void updateLabel() {
+    private void updateLabel() {
         String myFormat = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         shipmentdate.setText(sdf.format(myCalendar.getTime()));
-    }*/
+    }
 
     public void cancelStyle(View view) {
         finish();

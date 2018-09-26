@@ -156,7 +156,7 @@ public class WorkerAssignActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             progressDialog = ProgressDialog.show(WorkerAssignActivity.this,
-                    "ProgressDialog",
+                    "Data is loading",
                     "Wait for a few moments");
         }
     }
@@ -183,7 +183,7 @@ public class WorkerAssignActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             progressDialog = ProgressDialog.show(WorkerAssignActivity.this,
-                    "ProgressDialog",
+                    "Data is loading",
                     "Wait for a few moments");
         }
     }
