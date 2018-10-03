@@ -148,6 +148,8 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
             public void onResponse(String response) {
                 if (response.contains("SUCCESS")) {
                     Toast.makeText(context, "Data is saved!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(context, "Server problem!", Toast.LENGTH_SHORT).show();
                 }
                 Log.i("Response", response.toString());
             }

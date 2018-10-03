@@ -220,6 +220,8 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
                                     holder.workerIdView.getText().toString(), worker.getName()));
                             assignedWorkerData.add(new ProcessItem(processItem.getId(), processItem.getProcessName(), processItem.getMachineType(), new Double(Math.round(Integer.parseInt(holder.hourlyTarget.getText().toString()))),
                                     holder.workerIdView.getText().toString(), worker.getName()));
+                        }else{
+
                         }
                     } catch (Exception e) {
                         Log.e("ArrayListErr", e.toString());
