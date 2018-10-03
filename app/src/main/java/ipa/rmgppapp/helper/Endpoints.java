@@ -20,6 +20,7 @@ public class Endpoints {
     public static final String GET_ALL_STYLES = BASE_URL+"getAllStyles.php";
     public static final String GET_STYLE_DETAILS = BASE_URL+"getStyleDetails.php";
     public static final String DELETE_STYLE_URL = BASE_URL+"deleteStyle.php";
+    public static final String DELETE_LINE_DATA_URL = BASE_URL+"deleteLinedata.php";
     public static final String GET_LINE_RECORD = BASE_URL+"getLineData.php";
     public static final String UPDATE_LINE_DATA_STATUS = BASE_URL+"updateStatus.php";
 }

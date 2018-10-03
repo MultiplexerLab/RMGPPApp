@@ -191,8 +191,12 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
                     } catch (Exception e) {
                         Log.e("ArrayListErr", e.toString());
                     }
-                } else {
-                    Toast.makeText(context, "Please enter some value", Toast.LENGTH_SHORT).show();
+                } else if(holder.workerIdView.getText().toString().isEmpty()){
+                    processItemArrayList.remove(position);
+                    processItemArrayList.add(position, new ProcessItem(processItem.getId(), processItem.getProcessName(), processItem.getMachineType(), new Double(Math.round(Integer.parseInt(holder.hourlyTarget.getText().toString()))),
+                            "", ""));
+                    assignedWorkerData.add(new ProcessItem(processItem.getId(), processItem.getProcessName(), processItem.getMachineType(), new Double(Math.round(Integer.parseInt(holder.hourlyTarget.getText().toString()))),
+                            "", ""));
                 }
             }
         });

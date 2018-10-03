@@ -183,7 +183,52 @@ public class LineEntryFragment extends Fragment {
                 return true;
             }
         });
+
+        listViewLineData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle("Delete?").setCancelable(false).setMessage("Do you want to delete this data? If you delete you can not see it anymore!");
+                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        deleteLineData(idList.get(position));
+                    }
+                });
+                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
         return customView;
+    }
+
+    private void deleteLineData(String id) {
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = Endpoints.DELETE_LINE_DATA_URL+"?id="+id;
+        Log.i("url", url.toString());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("ResponseDeleteLineData", response.toString());
+                if(response.contains("DONE")) {
+                    getLineData();
+                    Toast.makeText(getActivity(), "The Data is deleted!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(), "Server Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        queue.add(stringRequest);
     }
 
     private void updateStatus(int position) {
@@ -239,6 +284,7 @@ public class LineEntryFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 if(response.contains("SUCCESS")){
+                    Log.i("Response", response.toString());
                     Toast.makeText(getActivity(), "Data is saved!", Toast.LENGTH_SHORT).show();
                     problemTypeSpinner.setSelection(0);
                     problemsSpinner.setSelection(0);

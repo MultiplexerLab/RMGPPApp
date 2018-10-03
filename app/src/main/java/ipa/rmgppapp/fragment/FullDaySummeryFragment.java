@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -32,6 +33,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class FullDaySummeryFragment extends Fragment {
 
     TextView lineTargetTotal, lineOutputTotal, totalInput, lineWip, totalStyleInput, totalStyleOutput;
+    Button buttonRefresh;
 
     public FullDaySummeryFragment(){
 
@@ -48,13 +50,20 @@ public class FullDaySummeryFragment extends Fragment {
         lineWip = customView.findViewById(R.id.lineWIP);
         totalStyleInput = customView.findViewById(R.id.totalStyleInput);
         totalStyleOutput = customView.findViewById(R.id.totalStyleOutput);
+        buttonRefresh = customView.findViewById(R.id.buttonRefresh);
 
         getSummeryData();
+
+        buttonRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSummeryData();
+            }
+        });
         return customView;
     }
 
     private void getSummeryData() {
-
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
         String styleNo = sharedPreferences.getString("styleNo", "");
