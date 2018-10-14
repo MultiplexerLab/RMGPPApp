@@ -8,13 +8,13 @@
     <Spinner
         android:id="@+id/spinnerTime"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Working Hour" />
 
     <TextView
         android:id="@+id/workerId"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Worker ID"
         android:padding="5dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
@@ -22,7 +22,7 @@
     <TextView
         android:id="@+id/workerName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Worker Name"
         android:padding="5dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
@@ -30,7 +30,7 @@
     <TextView
         android:id="@+id/processName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Process Name"
         android:padding="5dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
@@ -38,7 +38,7 @@
     <TextView
         android:id="@+id/hourlyTarget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Hourly Target"
         android:padding="5dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
@@ -68,26 +68,26 @@
     <EditText
         android:id="@+id/hourlyOutput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:hint="Hourly Output"
         android:inputType="number"/>
 
     <Spinner
         android:id="@+id/problemTypeSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Problem Type"></Spinner>
 
     <Spinner
         android:id="@+id/problemsSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:hint="Problem"></Spinner>
 
     <Button
         android:id="@+id/saveIndividualEntry"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimary"

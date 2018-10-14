@@ -32,7 +32,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FullDaySummeryFragment extends Fragment {
 
-    TextView lineTargetTotal, lineOutputTotal, totalInput, lineWip, totalStyleInput, totalStyleOutput;
+    TextView lineTargetTotal, lineOutputTotal, totalInput, lineWip, totalStyleInput, totalStyleOutput, totalStyleBalance;
     Button buttonRefresh;
 
     public FullDaySummeryFragment(){
@@ -51,6 +51,7 @@ public class FullDaySummeryFragment extends Fragment {
         totalStyleInput = customView.findViewById(R.id.totalStyleInput);
         totalStyleOutput = customView.findViewById(R.id.totalStyleOutput);
         buttonRefresh = customView.findViewById(R.id.buttonRefresh);
+        totalStyleBalance = customView.findViewById(R.id.totalStyleBalance);
 
         getSummeryData();
 
@@ -83,6 +84,8 @@ public class FullDaySummeryFragment extends Fragment {
                     totalStyleOutput.setText("Total Style Output: "+jsonObject.getString("totalStyleOutput"));
                     int wip = Integer.parseInt(jsonObject.getString("totalTarget")) - Integer.parseInt(jsonObject.getString("totalQuantity"));
                     lineWip.setText(wip+"");
+                    totalStyleBalance.setText("Remaining pieces: "+ (Integer.parseInt(jsonObject.getString("totalStyleInput"))-
+                            Integer.parseInt(jsonObject.getString("totalStyleOutput"))));
                 } catch (Exception e) {
                     Log.e("SummeryData", e.toString());
                 }

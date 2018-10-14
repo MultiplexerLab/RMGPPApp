@@ -1,19 +1,19 @@
 package ipa.rmgppapp.model;
 
 public class HourlyEntry {
-    private String timeStamp;
+    private String hour;
     private String workerId;
     private String workerName;
     private String processName;
     private String problemType;
     private String problem;
-    /*private String cuttingSlStart;
-    private String cuttingSlEnd;*/
     private int quantity;
     private String entryTime;
+    private String timeStamp;
 
-    public HourlyEntry(String timeStamp, String workerId, String workerName, String processName, int quantity, String entryTime, String problemType, String problem) {
-        this.timeStamp = timeStamp;
+    public HourlyEntry(String hour, String workerId, String workerName, String processName, int quantity, String entryTime, String problemType, String problem,
+                       String timeStamp) {
+        this.hour = hour;
         this.workerId = workerId;
         this.workerName = workerName;
         this.processName = processName;
@@ -21,6 +21,39 @@ public class HourlyEntry {
         this.entryTime = entryTime;
         this.problemType = problemType;
         this.problem = problem;
+        this.timeStamp = timeStamp;
+    }
+
+    public String getHour() {
+        return hour;
+    }
+
+    public void setHour(String hour) {
+        this.hour = hour;
+    }
+
+    public String getProblemType() {
+        return problemType;
+    }
+
+    public void setProblemType(String problemType) {
+        this.problemType = problemType;
+    }
+
+    public String getProblem() {
+        return problem;
+    }
+
+    public void setProblem(String problem) {
+        this.problem = problem;
+    }
+
+    public String getEntryTime() {
+        return entryTime;
+    }
+
+    public void setEntryTime(String entryTime) {
+        this.entryTime = entryTime;
     }
 
     public String getTimeStamp() {
@@ -28,7 +61,7 @@ public class HourlyEntry {
     }
 
     public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+        this.hour = timeStamp;
     }
 
     public String getWorkerId() {

@@ -4,14 +4,12 @@ import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,16 +32,11 @@ import java.util.Date;
 import java.util.List;
 
 import de.codecrafters.tableview.TableView;
-import de.codecrafters.tableview.listeners.OnScrollListener;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
-import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import ipa.rmgppapp.R;
-import ipa.rmgppapp.activity.WorkerAssignActivity;
-import ipa.rmgppapp.adapter.IndividualEntryAdapter;
 import ipa.rmgppapp.helper.Endpoints;
-import ipa.rmgppapp.model.HourlyReportRow;
 import ipa.rmgppapp.model.ProcessItem;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -58,7 +51,7 @@ public class HourlyReportFragment extends Fragment {
     TableView tableView;
     String prevId="";
     Button buttonRefreshHourlyReport;
-
+    SimpleTableDataAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,12 +62,14 @@ public class HourlyReportFragment extends Fragment {
 
         tableData = new ArrayList<>();
 
-        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(getActivity(), 15, 80);
+        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(getActivity(), 15, 90);
         columnModel1.setColumnWidth(0, 150);
         columnModel1.setColumnWidth(1, 100);
         columnModel1.setColumnWidth(2, 180);
         tableView.setColumnModel(columnModel1);
 
+        adapter = new SimpleTableDataAdapter(getActivity(), tableData);
+        tableView.setDataAdapter(adapter);
         AsyncGetHourlyReport obj = new AsyncGetHourlyReport();
         obj.execute();
 
@@ -89,16 +84,15 @@ public class HourlyReportFragment extends Fragment {
     }
 
     private void setTableData() {
-        tableView.setDataAdapter(new SimpleTableDataAdapter(getActivity(), tableData));
         tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(getActivity(), TABLE_HEADERS));
     }
 
     private void getTableData() {
+        tableData.clear();
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
         String tag = sharedPreferences.getString("description", "");
         Log.i("TagGet", tag);
-
         JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -109,14 +103,15 @@ public class HourlyReportFragment extends Fragment {
                 final ArrayList<ProcessItem> processItems = gson.fromJson(response.toString(), type);
                 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 String currentDate = df.format(new Date()).toString();
-                tableData.clear();
+                Log.i("processItems.size()", processItems.size()+"");
                 for(int i=0; i<processItems.size(); i++){
+                    final String arr[] = new String[14];
                     final String workerId = processItems.get(i).getAssignedWorkerId();
                     final int finalI = i;
                     JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_HOURLY_RECORD_DATA + "?workerId=" + workerId+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
-                                String arr[] = new String[14];
+
                                 arr[1] = workerId;
                                 arr[0] = processItems.get(finalI).getAssignedWorkerName();
                                 arr[2] = processItems.get(finalI).getProcessName();
@@ -161,11 +156,13 @@ public class HourlyReportFragment extends Fragment {
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[12]);
                                         }
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        Log.e("JsonException", e.toString());
                                     }
                                 }
                                 arr[13] = totalQuantity+"";
                                 tableData.add(arr);
+                                setTableData();
+                                adapter.notifyDataSetChanged();
                             }
                         }, new Response.ErrorListener() {
                             @Override
@@ -174,9 +171,7 @@ public class HourlyReportFragment extends Fragment {
                             }
                         });
                         queue.add(jsonArrayRequest);
-                        prevId = workerId;
                     }
-                    setTableData();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -191,7 +186,6 @@ public class HourlyReportFragment extends Fragment {
         ProgressDialog progressDialog;
         @Override
         protected String doInBackground(String... params) {
-            publishProgress("Data is Loading...");
             getTableData();
             return "";
         }

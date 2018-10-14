@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -19,7 +17,7 @@
         <de.codecrafters.tableview.TableView
             xmlns:table="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tableView"
-            android:layout_width="1200dp"
+            android:layout_width="1400dp"
             android:layout_height="wrap_content"
             table:tableView_columnCount="14" />
     </HorizontalScrollView>

@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ipa.rmgppapp.R;
+import ipa.rmgppapp.helper.DateTimeInstance;
 import ipa.rmgppapp.helper.Endpoints;
 import ipa.rmgppapp.model.HourlyEntry;
 import ipa.rmgppapp.model.ProcessItem;
@@ -84,6 +85,8 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                     flag = true;
+                    problems.clear();
+                    problems.add("Choose a Problem");
                     RequestQueue queue = Volley.newRequestQueue(context);
                     JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PROBLEM_DATA_URL + "?problemType=" + problemTypes[position], new Response.Listener<JSONArray>() {
                         @Override
@@ -133,7 +136,7 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                         //int quantity = calculateQuantity(cuttingSlStart.getText().toString(), cuttingSlEnd.getText().toString());
                         HourlyEntry obj = new HourlyEntry(spinnerTime.getSelectedItem().toString(), workerId.getText().toString(), workerName.getText().toString(),
                                 processName.getText().toString(), Integer.parseInt(hourlyOutput.getText().toString()), currentDate, problemType,
-                                problem);
+                                problem, DateTimeInstance.getTimeStamp());
                         saveIndividualEntry(obj);
                     }
                 }

@@ -41,6 +41,7 @@ import java.util.Map;
 
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.activity.StyleListActivity;
+import ipa.rmgppapp.helper.DateTimeInstance;
 import ipa.rmgppapp.helper.Endpoints;
 import ipa.rmgppapp.model.HourlyEntry;
 import ipa.rmgppapp.model.LineEntry;
@@ -157,7 +158,7 @@ public class LineEntryFragment extends Fragment {
                 }
                 LineEntry lineEntry = new LineEntry(spinnerTime.getSelectedItem().toString(), editTextInput.getText().toString(),
                         editTextOutput.getText().toString(), problemType, problem, status,
-                        styleNo, requiredDate);
+                        styleNo, requiredDate, DateTimeInstance.getTimeStamp());
                 saveLineEntry(lineEntry);
             }
         });
@@ -255,6 +256,8 @@ public class LineEntryFragment extends Fragment {
     }
 
     public void getProblemData(String problemType) {
+        problems.clear();
+        problems.add("Choose a Problem");
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PROBLEM_DATA_URL + "?problemType=" + problemType, new Response.Listener<JSONArray>() {
             @Override
@@ -338,14 +341,17 @@ public class LineEntryFragment extends Fragment {
                 Log.i("responseLineData", response.toString());
                 for(int i=0; i<response.length(); i++){
                     try {
-                        idList.add(response.getJSONObject(i).getString("id"));
-                        String data = response.getJSONObject(i).getString("hour")+
-                                ", Output: "+response.getJSONObject(i).getString("output")+
-                                /*"\nProblem Type: "+response.getJSONObject(i).getString("problemType")+*/
-                                ", Prob: "+response.getJSONObject(i).getString("problem")+
-                                "\nStatus: "+response.getJSONObject(i).getString("status");
-                        arrayListLineData.add(data);
-                        adapterLineData.notifyDataSetChanged();
+                        if(!response.getJSONObject(i).getString("problem").isEmpty()){
+                            idList.add(response.getJSONObject(i).getString("id"));
+                            String data = response.getJSONObject(i).getString("hour")+
+                                    ", Output: "+response.getJSONObject(i).getString("output")+
+                                    /*"\nProblem Type: "+response.getJSONObject(i).getString("problemType")+*/
+                                    ", Prob: "+response.getJSONObject(i).getString("problem")+
+                                    "\nStatus: "+response.getJSONObject(i).getString("status");
+                            arrayListLineData.add(data);
+                            adapterLineData.notifyDataSetChanged();
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

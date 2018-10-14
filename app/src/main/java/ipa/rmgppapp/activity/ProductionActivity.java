@@ -40,6 +40,7 @@ import ipa.rmgppapp.fragment.FullDaySummeryFragment;
 import ipa.rmgppapp.fragment.IndividualEntryFragment;
 import ipa.rmgppapp.fragment.HourlyReportFragment;
 import ipa.rmgppapp.fragment.LineEntryFragment;
+import ipa.rmgppapp.helper.DateTimeInstance;
 import ipa.rmgppapp.helper.Endpoints;
 
 public class ProductionActivity extends AppCompatActivity {
@@ -169,6 +170,7 @@ public class ProductionActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 String requiredDate = df.format(new Date()).toString();
+                SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
 
                 int lineInput = Integer.parseInt(lineInputStr)/Integer.parseInt(totalHours);
                 Map<String, String> params = new HashMap<String, String>();
@@ -177,6 +179,9 @@ public class ProductionActivity extends AppCompatActivity {
                 params.put("totalTarget", lineInputStr);
                 params.put("totalHours", totalHours);
                 params.put("entryTime", requiredDate);
+                params.put("time", DateTimeInstance.getTimeStamp());
+                params.put("lineNo", sharedPreferences.getString("lineNo", ""));
+                params.put("supervisorId", sharedPreferences.getString("supervisorId", ""));
                 return params;
             }
         };

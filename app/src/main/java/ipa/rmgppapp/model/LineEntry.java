@@ -10,8 +10,9 @@ public class LineEntry {
     private String status;
     private String styleNo;
     private String entryTime;
+    private String timeStamp;
 
-    public LineEntry(String hour, String lineInput, String lineOutput, String problemType, String problem, String status, String styleNo, String entryTime) {
+    public LineEntry(String hour, String lineInput, String lineOutput, String problemType, String problem, String status, String styleNo, String entryTime, String timeStamp) {
         this.hour = hour;
         this.lineInput = lineInput;
         this.lineOutput = lineOutput;
@@ -20,6 +21,15 @@ public class LineEntry {
         this.styleNo = styleNo;
         this.entryTime = entryTime;
         this.problem = problem;
+        this.timeStamp = timeStamp;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     public String getProblem() {
