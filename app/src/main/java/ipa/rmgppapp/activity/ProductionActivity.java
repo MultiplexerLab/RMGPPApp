@@ -49,7 +49,7 @@ public class ProductionActivity extends AppCompatActivity {
     private ViewPager viewPager;
     ViewPagerAdapter adapter;
     Toolbar toolbar;
-    Button buttonJumpWorkerAssign, buttonLineInput;
+    Button buttonJumpWorkerAssign, buttonLineTarget;
     String totalTarget, totalHours;
 
     @Override
@@ -62,7 +62,7 @@ public class ProductionActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         buttonJumpWorkerAssign = findViewById(R.id.buttonJumpWorkerAssign);
-        buttonLineInput = findViewById(R.id.buttonLineInput);
+        buttonLineTarget = findViewById(R.id.buttonLineTarget);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -82,12 +82,24 @@ public class ProductionActivity extends AppCompatActivity {
             }
         });
 
+        getPreviousLineTargetData();
+
+        buttonLineTarget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLineTargetDialog();
+            }
+        });
+    }
+
+    private void getPreviousLineTargetData() {
         SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
         String styleNo = sharedPreferences.getString("styleNo", "");
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String currentDate = df.format(new Date()).toString();
+
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.CHECK_LINE_TARGET_URL+"?styleNo="+styleNo+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.CHECK_LINE_TARGET_URL + "?styleNo=" + styleNo + "&entryTime=" + currentDate, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.i("responseLineData", response.toString());
@@ -108,12 +120,6 @@ public class ProductionActivity extends AppCompatActivity {
             }
         });
         queue.add(jsonArrayRequest);
-        buttonLineInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showLineTargetDialog();
-            }
-        });
     }
 
     private void showLineTargetDialog() {
@@ -127,21 +133,19 @@ public class ProductionActivity extends AppCompatActivity {
         dialog.setView(customView);
 
         Button saveButton = customView.findViewById(R.id.lineInputBtn);
-        final EditText lineInput = customView.findViewById(R.id.editTextLineInput);
+        final EditText lineTarget = customView.findViewById(R.id.editTextLineInput);
         final EditText totalHoursEd = customView.findViewById(R.id.editTextTotalHours);
-        lineInput.setText(totalTarget);
+        lineTarget.setText(totalTarget);
         totalHoursEd.setText(totalHours);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
-                String styleNo = sharedPreferences.getString("styleNo", "");
-                String lineInputStr = lineInput.getText().toString();
-                if(!lineInputStr.isEmpty()) {
-                    insertLineTarget(lineInputStr, styleNo, totalHoursEd.getText().toString());
+                String lineTargetStr = lineTarget.getText().toString();
+                if (!lineTargetStr.isEmpty()) {
+                    insertLineTarget(lineTargetStr, totalHoursEd.getText().toString());
                     dialog.dismiss();
-                }else{
+                } else {
                     Toast.makeText(ProductionActivity.this, "Insert Data!", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -149,14 +153,14 @@ public class ProductionActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void insertLineTarget(final String lineInputStr, final String styleNo, final String totalHours) {
+    private void insertLineTarget(final String lineTargetStr, final String totalHours) {
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.POST_LINE_TARGET_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(response.contains("SUCCESS")){
+                if (response.contains("SUCCESS")) {
                     Toast.makeText(ProductionActivity.this, "Data is saved!", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Log.i("lineTargetEntryResponse", response.toString());
                 }
             }
@@ -170,13 +174,15 @@ public class ProductionActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 String requiredDate = df.format(new Date()).toString();
+
                 SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
 
-                int lineInput = Integer.parseInt(lineInputStr)/Integer.parseInt(totalHours);
+                int lineInput = Integer.parseInt(lineTargetStr) / Integer.parseInt(totalHours);
+
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("styleNo", styleNo);
-                params.put("lineTarget", lineInput+"");
-                params.put("totalTarget", lineInputStr);
+                params.put("styleNo", sharedPreferences.getString("styleNo", ""));
+                params.put("lineTarget", lineInput + "");
+                params.put("totalTarget", lineTargetStr);
                 params.put("totalHours", totalHours);
                 params.put("entryTime", requiredDate);
                 params.put("time", DateTimeInstance.getTimeStamp());

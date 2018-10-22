@@ -163,6 +163,14 @@ public class WorkerAssignActivity extends AppCompatActivity {
 
     private class AsyncGetWorkerData extends AsyncTask<String, String, String> {
         ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(WorkerAssignActivity.this,
+                    "Data is loading",
+                    "Wait for a few moments");
+        }
+
         @Override
         protected String doInBackground(String... params) {
             publishProgress("Data is Loading...");
@@ -180,11 +188,6 @@ public class WorkerAssignActivity extends AppCompatActivity {
             AsyncGetProcessData process = new AsyncGetProcessData();
             process.execute();
         }
-        @Override
-        protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(WorkerAssignActivity.this,
-                    "Data is loading",
-                    "Wait for a few moments");
-        }
+
     }
 }
