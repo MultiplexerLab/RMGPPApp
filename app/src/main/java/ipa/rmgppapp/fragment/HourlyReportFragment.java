@@ -151,7 +151,8 @@ public class HourlyReportFragment extends Fragment {
                                         } else if (hour.contains("Hour 9")) {
                                             arr[11] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[11]);
-                                        } else if (hour.contains("Hour 10")) {
+                                        } else if (hour.contains("10")) {
+                                            Log.i("10th Hour", "Dhukse");
                                             arr[12] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[12]);
                                         }

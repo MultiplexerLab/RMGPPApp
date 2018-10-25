@@ -19,7 +19,7 @@
         android:text="Full Day Summery"
         android:visibility="gone"
         android:textColor="@color/colorPrimary"
-        android:layout_below="@+id/refreshButton"
+        android:layout_below="@+id/buttonRefresh"
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 

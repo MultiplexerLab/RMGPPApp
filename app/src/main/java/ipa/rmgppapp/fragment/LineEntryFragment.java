@@ -266,11 +266,11 @@ public class LineEntryFragment extends Fragment {
                     try {
                         String problem = response.getJSONObject(i).getString("Problem");
                         problems.add(problem);
-                        adapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                adapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override

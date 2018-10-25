@@ -84,7 +84,6 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
             problemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                    flag = true;
                     problems.clear();
                     problems.add("Choose a Problem");
                     RequestQueue queue = Volley.newRequestQueue(context);
