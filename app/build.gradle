@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "ipa.rmgppapp"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 7
         versionName "0.7"
