@@ -26,7 +26,9 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +74,11 @@ public class WorkerAssignActivity extends AppCompatActivity {
         final String description = sharedPreferences.getString("description", "");
         Log.i("description", description);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_OPERATION_DATA_URL + "?description=" + description, new Response.Listener<JSONArray>() {
+        String getUrl = Endpoints.GET_OPERATION_DATA_URL + "?description=" + description;
+        getUrl = getUrl.replace(" ", "%20");
+        Log.i("getUrl", getUrl);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.i("getPlanning", response.toString());

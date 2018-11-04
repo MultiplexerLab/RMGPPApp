@@ -65,8 +65,12 @@ public class IndividualEntryFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
         String tag = sharedPreferences.getString("description", "");
 
+        String getUrl = Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag;
+        getUrl = getUrl.replace(" ", "%20");
+        Log.i("getUrl", getUrl);
+
         Log.i("TagGet", tag);
-        JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag, new Response.Listener<JSONArray>() {
+        JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Gson gson = new Gson();
