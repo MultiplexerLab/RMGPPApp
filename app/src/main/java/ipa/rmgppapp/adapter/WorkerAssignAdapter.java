@@ -79,15 +79,17 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.POST_ASSIGNED_WORKER_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.i("responseWorker", response);
+                Log.i("savedWorkerData", response);
                 if (response.contains("Error")) {
-
+                    Toast.makeText(context, "ডাটা সেভ হয়নি! আবার চেষ্টা করুন।", Toast.LENGTH_SHORT).show();
                 } else {
                     Gson gson = new Gson();
                     String jsonProcess = gson.toJson(assignedWorkerData);
                     SharedPreferences.Editor editor = context.getSharedPreferences("hourlyEntry", MODE_PRIVATE).edit();
                     editor.putString("data", jsonProcess);
                     editor.commit();
+
+                    Toast.makeText(context, "ডাটা সেভ হয়েছে!", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(context, ProductionActivity.class);
                     context.startActivity(intent);
@@ -96,7 +98,9 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("ErrorInWorkerAssign", error.toString());
+                Log.e("ErrorInWorkerSave", error.toString());
+                Toast.makeText(context, "ডাটা সেভ হয়নি! আবার চেষ্টা করুন!", Toast.LENGTH_SHORT).show();
+
             }
         }) {
             @Override

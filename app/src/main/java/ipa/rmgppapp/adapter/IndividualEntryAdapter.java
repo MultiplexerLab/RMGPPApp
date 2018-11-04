@@ -149,9 +149,9 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
             @Override
             public void onResponse(String response) {
                 if (response.contains("SUCCESS")) {
-                    Toast.makeText(context, "Data is saved!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "ডাটা সেভ হয়েছে!", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(context, "Server problem!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "ডাটা সেভ হয়নি! আবার চেষ্টা করুন।", Toast.LENGTH_SHORT).show();
                 }
                 Log.i("Response", response.toString());
             }

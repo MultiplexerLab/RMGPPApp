@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class IndividualEntryFragment extends Fragment {
 
     RecyclerView mRecyclerView;
     RequestQueue queue;
+    Button refreshButton;
     String problemTypes[] = {"Choose a problem Type", "Input", "Maintenance", "Quality", "Production"};
 
     public IndividualEntryFragment() {
@@ -54,9 +56,17 @@ public class IndividualEntryFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
+        refreshButton = (Button) customView.findViewById(R.id.buttonRefeshWorker);
         mRecyclerView.setLayoutManager(layoutManager);
 
         getAssignedWorkerData();
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getAssignedWorkerData();
+            }
+        });
         return customView;
     }
 

@@ -288,10 +288,12 @@ public class LineEntryFragment extends Fragment {
             public void onResponse(String response) {
                 if(response.contains("SUCCESS")){
                     Log.i("Response", response.toString());
-                    Toast.makeText(getActivity(), "Data is saved!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "ডাটা সেভ হয়েছে!", Toast.LENGTH_SHORT).show();
                     problemTypeSpinner.setSelection(0);
                     problemsSpinner.setSelection(0);
                     getLineData();
+                }else{
+                    Toast.makeText(getContext(), "ডাটা সেভ হয়নি! আবার চেষ্টা করুন।", Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {

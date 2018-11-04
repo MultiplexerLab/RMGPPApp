@@ -139,7 +139,7 @@ public class WorkerAssignActivity extends AppCompatActivity {
 
     public void continueWorkerAssign(View view) {
         adapter.saveData();
-        finish();
+        //finish();
     }
 
     public void refreshData(View view) {

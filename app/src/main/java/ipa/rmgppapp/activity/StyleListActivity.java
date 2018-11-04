@@ -34,7 +34,7 @@ import ipa.rmgppapp.model.PlanningData;
 
 public class StyleListActivity extends AppCompatActivity {
 
-    private static final String[] TABLE_HEADERS = {"SL No", "Buyer", "Style", "Item", "Order", "Quantity", "Ship Date"};
+    private static final String[] TABLE_HEADERS = {"SL No", "Buyer", "Style", "Description", "Item", "Order", "Quantity", "Ship Date"};
 
     RequestQueue queue;
     ArrayList<PlanningData> planningDataArrayList;
@@ -73,7 +73,7 @@ public class StyleListActivity extends AppCompatActivity {
 
                     for (int i = 0; i < planningDataArrayList.size(); i++) {
                         PlanningData obj = planningDataArrayList.get(i);
-                        tableData.add(i, new String[]{(i + 1) + "", obj.getBuyer(), obj.getStyle(), obj.getItem(), obj.getOrderNo(), obj.getPlannedQuantity(), obj.getShipmentData()});
+                        tableData.add(i, new String[]{(i + 1) + "", obj.getBuyer(), obj.getStyle(), obj.getDescription(), obj.getItem(), obj.getOrderNo(), obj.getPlannedQuantity(), obj.getShipmentData()});
                     }
                     setTableData();
                 } catch (Exception e) {
@@ -92,7 +92,7 @@ public class StyleListActivity extends AppCompatActivity {
 
     public void setTableData() {
         tableView = findViewById(R.id.tableViewReport);
-        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(this, 7, 100);
+        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(this, 8, 100);
         columnModel1.setColumnWidth(0, 60);
         columnModel1.setColumnWidth(2, 180);
         columnModel1.setColumnWidth(3, 150);
