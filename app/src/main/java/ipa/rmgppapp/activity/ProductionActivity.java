@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -51,12 +52,14 @@ public class ProductionActivity extends AppCompatActivity {
     Toolbar toolbar;
     Button buttonJumpWorkerAssign, buttonLineTarget;
     String totalTarget, totalHours;
+    RequestQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_production);
 
+        queue = Volley.newRequestQueue(this);
         tabLayout = findViewById(R.id.tabLayoutProfile);
         viewPager = findViewById(R.id.viewPagerProfile);
         toolbar = findViewById(R.id.toolBar);
@@ -98,8 +101,11 @@ public class ProductionActivity extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String currentDate = df.format(new Date()).toString();
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.CHECK_LINE_TARGET_URL + "?styleNo=" + styleNo + "&entryTime=" + currentDate, new Response.Listener<JSONArray>() {
+        String getUrl = Endpoints.CHECK_LINE_TARGET_URL + "?styleNo=" + styleNo + "&entryTime=" + currentDate;
+        getUrl = getUrl.replace(" ", "%20");
+        Log.i("getUrl", getUrl);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.i("responseLineData", response.toString());
@@ -119,6 +125,10 @@ public class ProductionActivity extends AppCompatActivity {
                 Log.e("LineDataErr", error.toString());
             }
         });
+
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(2000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsonArrayRequest);
     }
 

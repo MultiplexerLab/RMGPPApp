@@ -115,7 +115,6 @@ public class HourlyReportFragment extends Fragment {
                     JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_HOURLY_RECORD_DATA + "?workerId=" + workerId+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
-
                                 arr[1] = workerId;
                                 arr[0] = processItems.get(finalI).getAssignedWorkerName();
                                 arr[2] = processItems.get(finalI).getProcessName();

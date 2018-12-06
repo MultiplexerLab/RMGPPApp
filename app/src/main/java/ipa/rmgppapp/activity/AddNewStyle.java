@@ -39,31 +39,44 @@ import ipa.rmgppapp.helper.Endpoints;
 
 public class AddNewStyle extends AppCompatActivity {
 
-    EditText buyer, description, order, item, quantity, shipmentdate;
+    EditText buyer, item, quantity, shipmentdate;
     Calendar myCalendar;
-    AutoCompleteTextView styleNo;
-    ArrayList<String> styleNoList;
-    ArrayAdapter<String> adapter;
+    AutoCompleteTextView description, styleNo, order;
+    ArrayList<String> descriptions;
+    ArrayList<String> styleList;
+    ArrayList<String> orderList;
+    ArrayAdapter<String> adapter, adapter1, adapter2;
+    int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_style);
 
+        description = (AutoCompleteTextView) findViewById(R.id.description);
         styleNo = (AutoCompleteTextView) findViewById(R.id.styleNo);
+        order = (AutoCompleteTextView) findViewById(R.id.order);
         buyer = findViewById(R.id.buyer);
-        description = findViewById(R.id.description);
-        order = findViewById(R.id.order);
         item = findViewById(R.id.item);
         quantity = findViewById(R.id.quantity);
         shipmentdate = findViewById(R.id.shipMentDate);
-        styleNoList = new ArrayList<>();
+        descriptions = new ArrayList<>();
+        styleList = new ArrayList<>();
+        orderList = new ArrayList<>();
 
         adapter = new ArrayAdapter<String>(AddNewStyle.this,
-                android.R.layout.simple_dropdown_item_1line, styleNoList);
-        styleNo.setAdapter(adapter);
+                android.R.layout.simple_dropdown_item_1line, descriptions);
+        description.setAdapter(adapter);
 
-        getStyleList();
+        adapter1 = new ArrayAdapter<String>(AddNewStyle.this,
+                android.R.layout.simple_dropdown_item_1line, styleList);
+        styleNo.setAdapter(adapter1);
+
+        adapter2 = new ArrayAdapter<String>(AddNewStyle.this,
+                android.R.layout.simple_dropdown_item_1line, orderList);
+        order.setAdapter(adapter2);
+
+        getAllData();
 
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -84,63 +97,110 @@ public class AddNewStyle extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-        styleNo.addTextChangedListener(new TextWatcher() {
+
+        description.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(!styleNo.getText().toString().isEmpty() && styleNo.getText().toString().length()>2){
-                    getPlanningData(styleNo.getText().toString());
+                if(!description.getText().toString().isEmpty() && description.getText().toString().length()>5){
+                    flag=flag+1;
+                    if(flag==1) {
+                        getPlanningData("Description", description.getText().toString());
+                    }
+                }
+            }
+        });
+
+        styleNo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!styleNo.getText().toString().isEmpty() && styleNo.getText().toString().length()>5){
+                    flag=flag+1;
+                    if(flag==1) {
+                        getPlanningData("Style", styleNo.getText().toString());
+                    }
+                }
+            }
+        });
+
+        order.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!order.getText().toString().isEmpty() && order.getText().toString().length()>5){
+                    flag=flag+1;
+                    if(flag==1) {
+                        getPlanningData("Order_number", order.getText().toString());
+                    }
                 }
             }
         });
     }
 
-    private void getPlanningData(String styleNo) {
+    private void getPlanningData(String tag, String val) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_STYLE_DETAILS+"?styleNo="+styleNo, new Response.Listener<JSONArray>() {
+        String url = Endpoints.GET_STYLE_DETAILS+"?tag="+tag+"&val="+val;
+        Log.i("Url", url);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    JSONObject jsonObject = response.getJSONObject(0);
-                    buyer.setText(jsonObject.getString("buyer"));
-                    item.setText(jsonObject.getString("item"));
-                    description.setText(jsonObject.getString("description"));
-                    order.setText(jsonObject.getString("orderNo"));
-                    shipmentdate.setText(jsonObject.getString("shipmentData"));
-                    quantity.setText(jsonObject.getString("plannedQuantity"));
-                    Log.i("Data", jsonObject.toString());
+                    for(int i=0; i<response.length();i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        styleNo.setText(jsonObject.getString("style"));
+                        buyer.setText(jsonObject.getString("buyer"));
+                        item.setText(jsonObject.getString("item"));
+                        description.setText(jsonObject.getString("description"));
+                        order.setText(jsonObject.getString("orderNo"));
+                        shipmentdate.setText(jsonObject.getString("shipmentData"));
+                        quantity.setText(jsonObject.getString("plannedQuantity"));
+                        Log.i("PlanningData", jsonObject.toString());
+                    }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e("JSONExceptionErr", e.toString());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e("PlanningError", error.toString());
             }
         });
         queue.add(jsonArrayRequest);
     }
 
-    private void getStyleList() {
+    private void getAllData() {
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_ALL_STYLES, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.i("StyleList", response.toString());
+                Log.i("Description", response.toString());
                 for(int i=0; i<response.length(); i++){
                     try {
-                        styleNoList.add(response.getJSONObject(i).getString("styleNo"));
+                        descriptions.add(response.getJSONObject(i).getString("description"));
+                        styleList.add(response.getJSONObject(i).getString("style"));
+                        orderList.add(response.getJSONObject(i).getString("orderNo"));
                         adapter.notifyDataSetChanged();
+                        adapter1.notifyDataSetChanged();
+                        adapter2.notifyDataSetChanged();
                     } catch (JSONException e) {
                         Log.e("ArrayAssignErr", e.toString());
                     }
@@ -149,7 +209,7 @@ public class AddNewStyle extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("StyleListErr", error.toString());
+                Log.e("DescListErr", error.toString());
             }
         });
         queue.add(jsonArrayRequest);
@@ -181,12 +241,17 @@ public class AddNewStyle extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("StyleEntryErr", error.toString());
+                Toast.makeText(AddNewStyle.this, "Server Problem!", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
             protected Map<String, String> getParams() {
                 SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
                 String lineNo = sharedPreferences.getString("lineNo", "");
+
+                Calendar cal = Calendar.getInstance();
+                String myFormat = "yyyy-MM-dd";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("plannedLine", lineNo);
@@ -197,6 +262,7 @@ public class AddNewStyle extends AppCompatActivity {
                 params.put("orderNo", order.getText().toString());
                 params.put("shipmentDate", shipmentdate.getText().toString());
                 params.put("quantity", quantity.getText().toString());
+                params.put("sewingStart", sdf.format(cal.getTime()));
                 return params;
             }
         };

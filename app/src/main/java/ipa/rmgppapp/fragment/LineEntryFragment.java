@@ -96,7 +96,9 @@ public class LineEntryFragment extends Fragment {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String currentDate = df.format(new Date()).toString();
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.CHECK_LINE_TARGET_URL+"?styleNo="+styleNo+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
+        String getUrl = Endpoints.CHECK_LINE_TARGET_URL+"?styleNo="+styleNo+"&entryTime="+currentDate;
+        getUrl = getUrl.replace(" ", "%20");
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.i("responseLineData", response.toString());
@@ -156,10 +158,14 @@ public class LineEntryFragment extends Fragment {
                 if(!statusSpinner.getSelectedItem().toString().contains("Choose")) {
                     status = statusSpinner.getSelectedItem().toString();
                 }
-                LineEntry lineEntry = new LineEntry(spinnerTime.getSelectedItem().toString(), editTextInput.getText().toString(),
-                        editTextOutput.getText().toString(), problemType, problem, status,
-                        styleNo, requiredDate, DateTimeInstance.getTimeStamp());
-                saveLineEntry(lineEntry);
+                if(editTextOutput.getText().toString().isEmpty()){
+                    Toast.makeText(getActivity(), "Please insert any output value", Toast.LENGTH_SHORT).show();
+                }else{
+                    LineEntry lineEntry = new LineEntry(spinnerTime.getSelectedItem().toString(), editTextInput.getText().toString(),
+                            editTextOutput.getText().toString(), problemType, problem, status,
+                            styleNo, requiredDate, DateTimeInstance.getTimeStamp());
+                    saveLineEntry(lineEntry);
+                }
             }
         });
 
@@ -211,6 +217,7 @@ public class LineEntryFragment extends Fragment {
     private void deleteLineData(String id) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = Endpoints.DELETE_LINE_DATA_URL+"?id="+id;
+        url = url.replace(" ", "%20");
         Log.i("url", url.toString());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -235,6 +242,7 @@ public class LineEntryFragment extends Fragment {
     private void updateStatus(int position) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String updateUrl = Endpoints.UPDATE_LINE_DATA_STATUS+"?id="+idList.get(position);
+        updateUrl = updateUrl.replace(" ", "%20");
         Log.i("updateUrl", updateUrl);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, updateUrl,
@@ -259,7 +267,9 @@ public class LineEntryFragment extends Fragment {
         problems.clear();
         problems.add("Choose a Problem");
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PROBLEM_DATA_URL + "?problemType=" + problemType, new Response.Listener<JSONArray>() {
+        String getUrl = Endpoints.GET_PROBLEM_DATA_URL + "?problemType=" + problemType;
+        getUrl = getUrl.replace(" ", "%20");
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 for (int i = 0; i < response.length(); i++) {
@@ -292,6 +302,7 @@ public class LineEntryFragment extends Fragment {
                     problemTypeSpinner.setSelection(0);
                     problemsSpinner.setSelection(0);
                     getLineData();
+                    removeViews();
                 }else{
                     Toast.makeText(getContext(), "ডাটা সেভ হয়নি! আবার চেষ্টা করুন।", Toast.LENGTH_SHORT).show();
                 }
@@ -300,6 +311,7 @@ public class LineEntryFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i("InsertIndividualEntry", error.toString());
+                Toast.makeText(getContext(), "ডাটা সেভ হয়নি! আবার চেষ্টা করুন।", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -314,15 +326,29 @@ public class LineEntryFragment extends Fragment {
                 }
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
                 String supervisor = sharedPreferences.getString("supervisorId", "");
+                String styleNo = sharedPreferences.getString("styleNo", "");
+                String lineNo = sharedPreferences.getString("lineNo", "");
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String currentDate = df.format(new Date()).toString();
 
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("jsonString", jsonString);
                 params.put("supervisor", supervisor);
-                Log.i("jsonString", jsonString);
+                params.put("lineNo", lineNo);
+                params.put("uniqueKey", supervisor+styleNo+currentDate+obj.getHour());
+                Log.i("jsonString", params.toString());
                 return params;
             }
         };
         queue.add(stringRequest);
+    }
+
+    private void removeViews() {
+        editTextInput.setText("");
+        editTextOutput.setText("");
+        problemTypeSpinner.setSelection(0);
+        problemsSpinner.setSelection(0);
+        statusSpinner.setSelection(0);
     }
 
     public void getLineData(){
@@ -336,6 +362,7 @@ public class LineEntryFragment extends Fragment {
 
         String url = Endpoints.GET_LINE_RECORD+"?styleNo="+styleNo+
                 "&entryTime="+currentDate;
+        url = url.replace(" ", "%20");
         Log.i("urlLineData", url);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override

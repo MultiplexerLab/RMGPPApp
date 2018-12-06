@@ -14,21 +14,21 @@
     <EditText
         android:id="@+id/hourlyLineTarget"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:enabled="false"
         android:hint="Line Target"/>
 
     <EditText
         android:id="@+id/editTextInput"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:hint="Input"
         android:inputType="number"/>
 
     <EditText
         android:id="@+id/editTextOutput"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:inputType="number"
         android:hint="Line output" />
 

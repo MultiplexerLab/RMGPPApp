@@ -72,7 +72,9 @@ public class FullDaySummeryFragment extends Fragment {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String currentDate = df.format(new Date()).toString();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_SUMMERY_DATA+"?styleNo="+styleNo+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
+        String getUrl = Endpoints.GET_SUMMERY_DATA+"?styleNo="+styleNo+"&entryTime="+currentDate;
+        getUrl = getUrl.replace(" ", "%20");
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
@@ -82,10 +84,10 @@ public class FullDaySummeryFragment extends Fragment {
                     totalInput.setText(jsonObject.getString("totalInput"));
                     totalStyleInput.setText("Total Style Input: "+jsonObject.getString("totalStyleInput"));
                     totalStyleOutput.setText("Total Style Output: "+jsonObject.getString("totalStyleOutput"));
-                    int wip = Integer.parseInt(jsonObject.getString("totalTarget")) - Integer.parseInt(jsonObject.getString("totalQuantity"));
-                    lineWip.setText(wip+"");
-                    totalStyleBalance.setText("Remaining pieces: "+ (Integer.parseInt(jsonObject.getString("totalStyleInput"))-
-                            Integer.parseInt(jsonObject.getString("totalStyleOutput"))));
+                    int remainingOutput = (Integer.parseInt(jsonObject.getString("totalStyleInput"))-
+                            Integer.parseInt(jsonObject.getString("totalStyleOutput")));
+                    Log.i("remainingOutput", remainingOutput+"");
+                    totalStyleBalance.setText("Remaining pieces: "+ remainingOutput);
                 } catch (Exception e) {
                     Log.e("SummeryData", e.toString());
                 }

@@ -94,10 +94,11 @@ public class StyleListActivity extends AppCompatActivity {
         tableView = findViewById(R.id.tableViewReport);
         TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(this, 8, 100);
         columnModel1.setColumnWidth(0, 60);
-        columnModel1.setColumnWidth(2, 180);
-        columnModel1.setColumnWidth(3, 150);
+        columnModel1.setColumnWidth(2, 140);
+        columnModel1.setColumnWidth(3, 140);
+        columnModel1.setColumnWidth(4, 140);
         columnModel1.setColumnWidth(4, 150);
-        columnModel1.setColumnWidth(6, 150);
+        columnModel1.setColumnWidth(7, 150);
 
         tableView.setColumnModel(columnModel1);
 

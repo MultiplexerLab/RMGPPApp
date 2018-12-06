@@ -71,6 +71,11 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
                 worker = workerArrayList.get(i);
             }
         }
+        if(worker==null){
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            String currentDate = df.format(new Date()).toString();
+            worker = new Worker(s, "", "", "", currentDate);
+        }
         return worker;
     }
 
@@ -115,15 +120,16 @@ public class WorkerAssignAdapter extends RecyclerView.Adapter<WorkerAssignAdapte
                 }
                 SharedPreferences sharedPreferences = context.getSharedPreferences("supervisor", MODE_PRIVATE);
                 String description = sharedPreferences.getString("description", "");
+                String lineNo = sharedPreferences.getString("lineNo", "");
 
                 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 String requiredDate = df.format(new Date()).toString();
-
                 Log.i("EntryTime", requiredDate);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("jsonArrayString", jsonArrayString);
                 params.put("tag", description);
                 params.put("entryTime", requiredDate);
+                params.put("lineNo", lineNo);
                 Log.i("jsonArrayString", jsonArrayString);
                 return params;
             }

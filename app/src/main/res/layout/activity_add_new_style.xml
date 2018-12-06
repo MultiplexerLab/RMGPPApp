@@ -12,15 +12,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Please Insert new style Info"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimary"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description by IE"
+        android:layout_marginTop="20dp"
+        android:inputType="text" />
 
     <AutoCompleteTextView
         android:id="@+id/styleNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Type Style No"
-        android:layout_marginTop="20dp"
+        android:hint="Style No"
         android:inputType="text" />
 
     <EditText
@@ -29,11 +36,6 @@
         android:layout_height="wrap_content"
         android:hint="Buyer"/>
 
-    <EditText
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Description"/>
 
     <EditText
         android:id="@+id/item"
@@ -41,11 +43,12 @@
         android:layout_height="wrap_content"
         android:hint="Item"/>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Order No"/>
+        android:hint="Order No"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/quantity"

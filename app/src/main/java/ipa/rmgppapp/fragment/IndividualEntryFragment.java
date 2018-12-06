@@ -73,11 +73,12 @@ public class IndividualEntryFragment extends Fragment {
     private void getAssignedWorkerData() {
         queue = Volley.newRequestQueue(getActivity());
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
+        String lineNo = sharedPreferences.getString("lineNo", "");
         String tag = sharedPreferences.getString("description", "");
 
-        String getUrl = Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag;
+        String getUrl = Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag+"&lineNo="+lineNo;
         getUrl = getUrl.replace(" ", "%20");
-        Log.i("getUrl", getUrl);
+        Log.i("getUrlIndividual", getUrl);
 
         Log.i("TagGet", tag);
         JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {

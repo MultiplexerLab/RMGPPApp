@@ -5,11 +5,26 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <Spinner
-        android:id="@+id/spinnerTime"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:hint="Working Hour" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/hourlyOutput"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:hint="Hourly Output"
+            android:inputType="number"/>
+
+        <Spinner
+            android:id="@+id/spinnerTime"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="30dp"
+            android:hint="Working Hour" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/workerId"
@@ -65,13 +80,6 @@
             android:inputType="text" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/hourlyOutput"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="Hourly Output"
-        android:inputType="number"/>
-
     <Spinner
         android:id="@+id/problemTypeSpinner"
         android:layout_width="match_parent"
@@ -87,7 +95,7 @@
     <Button
         android:id="@+id/saveIndividualEntry"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimary"

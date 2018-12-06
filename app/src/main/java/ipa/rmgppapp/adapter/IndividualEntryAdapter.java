@@ -126,9 +126,9 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                         String problemType = "";
                         String problem = "";
 
-                        if(flag){
-                            if(!problemTypeSpinner.getSelectedItem().toString().contains("Choose")) {
-                                problemType = problemTypeSpinner.getSelectedItem().toString();
+                        if(!problemTypeSpinner.getSelectedItem().toString().contains("Choose")) {
+                            problemType = problemTypeSpinner.getSelectedItem().toString();
+                            if(!problemsSpinner.getSelectedItem().toString().contains("Choose")) {
                                 problem = problemsSpinner.getSelectedItem().toString();
                             }
                         }
@@ -159,6 +159,7 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i("InsertIndividualEntry", error.toString());
+                Toast.makeText(context, "ডাটা সেভ হয়নি! আবার চেষ্টা করুন।", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -172,16 +173,21 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                 } catch (Exception e) {
                     Log.e("ArrayException", e.toString());
                 }
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String currentDate = df.format(new Date()).toString();
 
                 SharedPreferences sharedPreferences = context.getSharedPreferences("supervisor", MODE_PRIVATE);
                 String supervisor = sharedPreferences.getString("supervisorId", "");
                 String styleNo = sharedPreferences.getString("styleNo", "");
+                String lineNo = sharedPreferences.getString("lineNo", "");
 
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("jsonString", jsonString);
                 params.put("supervisor", supervisor);
                 params.put("styleNo", styleNo);
-                Log.i("jsonString", jsonString);
+                params.put("lineNo", lineNo);
+                params.put("uniqueKey", obj.getWorkerId()+supervisor+styleNo+currentDate+obj.getHour());
+                Log.i("jsonString", params.toString());
                 return params;
             }
         };
