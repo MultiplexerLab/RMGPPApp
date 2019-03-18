@@ -20,6 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -27,6 +28,7 @@ import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -48,16 +50,17 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
     ArrayList<ProcessItem> processItems;
     ArrayList<String> problems;
     Context context;
-    String times[] = {"Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10"};
+    String[] times = {"Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10" , "Hour 11", "Hour 12", "Hour 13", "Hour 14", "Hour 15"};
     String problemTypes[] = {"Choose a problem Type", "Input", "Maintenance", "Quality", "Production"};
-    ArrayAdapter<String> adapter;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView workerId, workerName, processName, hourlyTarget;
-        EditText hourlyOutput;
+        EditText hourlyOutput, note;
         Button saveIndividualEntry;
         Spinner spinnerTime, problemTypeSpinner, problemsSpinner;
         boolean flag = false;
+        ArrayAdapter<String> problemAdapter;
 
         public MyViewHolder(View view) {
             super(view);
@@ -70,6 +73,7 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
             problemTypeSpinner = view.findViewById(R.id.problemTypeSpinner);
             problemsSpinner = view.findViewById(R.id.problemsSpinner);
             hourlyTarget = view.findViewById(R.id.hourlyTarget);
+            note = view.findViewById(R.id.note);
 
             spinnerTime.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, times));
 
@@ -78,8 +82,8 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
 
             problemTypeSpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, problemTypes));
 
-            adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, problems);
-            problemsSpinner.setAdapter(adapter);
+            problemAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, problems);
+            problemsSpinner.setAdapter(problemAdapter);
 
             problemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -87,27 +91,36 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                     problems.clear();
                     problems.add("Choose a Problem");
                     RequestQueue queue = Volley.newRequestQueue(context);
-                    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PROBLEM_DATA_URL + "?problemType=" + problemTypes[position], new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            for (int i = 0; i < response.length(); i++) {
+                    if(!problemTypes[position].contains("Choose")) {
+                        final JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.GET_PROBLEM_DATA_URL + problemTypes[position], new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
                                 try {
-                                    String problem = response.getJSONObject(i).getString("Problem");
-                                    Log.i("problem", problem);
-                                    problems.add(problem);
+                                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        try {
+                                            String problem = jsonArray.getJSONObject(i).getString("Problem");
+                                            Log.i("problem", problem);
+                                            problems.add(problem);
+                                        } catch (JSONException e) {
+                                            Log.e("ProblemLoadingErr", e.toString());
+                                        }
+                                    }
                                 } catch (JSONException e) {
-                                    Log.e("ProblemLoadingErr", e.toString());
+                                    e.printStackTrace();
+                                }finally {
+                                    problemAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, problems);
+                                    problemsSpinner.setAdapter(problemAdapter);
                                 }
                             }
-                            adapter.notifyDataSetChanged();
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
 
-                        }
-                    });
-                    queue.add(jsonArrayRequest);
+                            }
+                        });
+                        queue.add(jsonArrayRequest);
+                    }
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
@@ -134,8 +147,8 @@ public class IndividualEntryAdapter extends RecyclerView.Adapter<IndividualEntry
                         }
                         //int quantity = calculateQuantity(cuttingSlStart.getText().toString(), cuttingSlEnd.getText().toString());
                         HourlyEntry obj = new HourlyEntry(spinnerTime.getSelectedItem().toString(), workerId.getText().toString(), workerName.getText().toString(),
-                                processName.getText().toString(), Integer.parseInt(hourlyOutput.getText().toString()), currentDate, problemType,
-                                problem, DateTimeInstance.getTimeStamp());
+                                processName.getText().toString(), hourlyTarget.getText().toString(), Integer.parseInt(hourlyOutput.getText().toString()), currentDate, problemType,
+                                problem, DateTimeInstance.getTimeStamp(), note.getText().toString());
                         saveIndividualEntry(obj);
                     }
                 }

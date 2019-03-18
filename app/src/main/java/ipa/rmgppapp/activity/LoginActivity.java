@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -39,12 +40,13 @@ import ipa.rmgppapp.helper.Endpoints;
 public class LoginActivity extends AppCompatActivity {
 
     EditText eTSuperVisorId;
-    Spinner spinnerLine;
+    Spinner spinnerLine, spinnerSection;
     RequestQueue queue;
     ArrayList<String> lineData;
     Snackbar snackbar;
     LinearLayout rootLayout;
     ArrayAdapter<String> adapter;
+    String[] sectionArr = {"Full Line", "Front Part", "Back Part", "Output", "Input" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
         eTSuperVisorId = findViewById(R.id.editTextSuperVisorId);
         spinnerLine = findViewById(R.id.spinnerLine);
+        spinnerSection = findViewById(R.id.spinnerSection);
         rootLayout = findViewById(R.id.rootLayout);
 
         lineData = new ArrayList<>();
@@ -89,6 +92,8 @@ public class LoginActivity extends AppCompatActivity {
         }
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lineData);
         spinnerLine.setAdapter(adapter);
+
+        spinnerSection.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, sectionArr));
     }
 
     private void getSpinnerData(String superVisorId) {
@@ -165,6 +170,22 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("CheckSuperVisor", error.toString());
+            }
+        });
+        stringRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 1000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 1000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
             }
         });
         queue.add(stringRequest);

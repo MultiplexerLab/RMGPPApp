@@ -35,7 +35,7 @@
 
     <TextView
         android:id="@+id/lineTargetTotal"
-        android:layout_width="205dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
         android:layout_marginLeft="20dp"
@@ -56,7 +56,7 @@
 
     <TextView
         android:id="@+id/lineOutputTotal"
-        android:layout_width="223dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:textStyle="bold"
@@ -67,7 +67,7 @@
         android:ems="10"
         android:inputType="textPersonName" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName" />-->
 
     <TextView
         android:id="@+id/textView5"
@@ -96,13 +96,35 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/buttonRefresh"
-        android:layout_marginTop="179dp"
-        android:text="Remaining Output"
+        android:layout_marginTop="146dp"
+        android:text="Remaining Target"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/buttonRefresh"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="180dp"
+        android:text="Remaining Hours"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/buttonRefresh"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="216dp"
+        android:text="Revised Target"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TextView
         android:id="@+id/lineWIP"
-        android:layout_width="223dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/lineTargetTotal"
         android:layout_alignTop="@+id/textView5"
@@ -112,6 +134,32 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/remainingHours"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/lineTargetTotal"
+        android:layout_alignTop="@+id/textView5"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="33dp"
+        android:inputType="textPersonName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/revisedTarget"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/lineTargetTotal"
+        android:layout_alignTop="@+id/textView5"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="70dp"
+        android:inputType="textPersonName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold" />
+
+    <!--<TextView
         android:id="@+id/textView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -151,6 +199,6 @@
         android:layout_alignLeft="@id/textView20"
         android:layout_marginTop="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="Remaining Balance" />
+        android:text="Remaining Balance" />-->
 
 </RelativeLayout>

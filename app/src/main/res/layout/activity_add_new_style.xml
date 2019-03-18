@@ -15,13 +15,13 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimary"/>
 
-    <AutoCompleteTextView
+   <!-- <AutoCompleteTextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Description by IE"
         android:layout_marginTop="20dp"
-        android:inputType="text" />
+        android:inputType="text" />-->
 
     <AutoCompleteTextView
         android:id="@+id/styleNo"
@@ -30,7 +30,7 @@
         android:hint="Style No"
         android:inputType="text" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/buyer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,7 +61,8 @@
         android:id="@+id/shipMentDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Shipment Date"/>
+        android:focusable="false"
+        android:hint="Style Closing Date"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -32,7 +32,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FullDaySummeryFragment extends Fragment {
 
-    TextView lineTargetTotal, lineOutputTotal, totalInput, lineWip, totalStyleInput, totalStyleOutput, totalStyleBalance;
+    TextView lineTargetTotal, lineOutputTotal, lineWip, remainingTarget, revisedTarget, remainingHours;
     Button buttonRefresh;
 
     public FullDaySummeryFragment(){
@@ -46,12 +46,11 @@ public class FullDaySummeryFragment extends Fragment {
 
         lineTargetTotal = customView.findViewById(R.id.lineTargetTotal);
         lineOutputTotal = customView.findViewById(R.id.lineOutputTotal);
-        totalInput = customView.findViewById(R.id.totalInput);
+        remainingTarget = customView.findViewById(R.id.lineWIP);
+        remainingHours = customView.findViewById(R.id.remainingHours);
+        revisedTarget = customView.findViewById(R.id.revisedTarget);
         lineWip = customView.findViewById(R.id.lineWIP);
-        totalStyleInput = customView.findViewById(R.id.totalStyleInput);
-        totalStyleOutput = customView.findViewById(R.id.totalStyleOutput);
         buttonRefresh = customView.findViewById(R.id.buttonRefresh);
-        totalStyleBalance = customView.findViewById(R.id.totalStyleBalance);
 
         getSummeryData();
 
@@ -74,20 +73,27 @@ public class FullDaySummeryFragment extends Fragment {
 
         String getUrl = Endpoints.GET_SUMMERY_DATA+"?styleNo="+styleNo+"&entryTime="+currentDate;
         getUrl = getUrl.replace(" ", "%20");
+        Log.i("summery", getUrl);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
                     JSONObject jsonObject = response.getJSONObject(0);
-                    lineOutputTotal.setText(jsonObject.getString("totalQuantity"));
-                    lineTargetTotal.setText(jsonObject.getString("totalTarget"));
-                    totalInput.setText(jsonObject.getString("totalInput"));
+                    int totalHours = Integer.parseInt(jsonObject.getString("totalHours"));
+                    int hours = Integer.parseInt(jsonObject.getString("hours"));
+                    int totalTarget = Integer.parseInt(jsonObject.getString("totalTarget"));
+                    int totalOutput = Integer.parseInt(jsonObject.getString("totalQuantity"));
+                    lineOutputTotal.setText(totalOutput+"");
+                    lineTargetTotal.setText(totalTarget+"");
+                    remainingTarget.setText((totalTarget-totalOutput)+"");
+                    remainingHours.setText((totalHours-hours)+"");
+                    revisedTarget.setText(((totalTarget-totalOutput)/(totalHours-hours))+"");
+                    /*totalInput.setText(jsonObject.getString("totalInput"));
                     totalStyleInput.setText("Total Style Input: "+jsonObject.getString("totalStyleInput"));
-                    totalStyleOutput.setText("Total Style Output: "+jsonObject.getString("totalStyleOutput"));
-                    int remainingOutput = (Integer.parseInt(jsonObject.getString("totalStyleInput"))-
+                    totalStyleOutput.setText("Total Style Output: "+jsonObject.getString("totalStyleOutput"));*/
+                    /*int remainingOutput = (Integer.parseInt(jsonObject.getString("totalStyleInput"))-
                             Integer.parseInt(jsonObject.getString("totalStyleOutput")));
-                    Log.i("remainingOutput", remainingOutput+"");
-                    totalStyleBalance.setText("Remaining pieces: "+ remainingOutput);
+                    Log.i("remainingOutput", remainingOutput+"");*/
                 } catch (Exception e) {
                     Log.e("SummeryData", e.toString());
                 }
@@ -95,7 +101,7 @@ public class FullDaySummeryFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("SummeryData", error.toString());
+                Log.e("SummeryDataVolley", error.toString());
             }
         });
         queue.add(jsonArrayRequest);

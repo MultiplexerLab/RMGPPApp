@@ -39,10 +39,10 @@ import ipa.rmgppapp.helper.Endpoints;
 
 public class AddNewStyle extends AppCompatActivity {
 
-    EditText buyer, item, quantity, shipmentdate;
+    EditText item, quantity, shipmentdate;
     Calendar myCalendar;
-    AutoCompleteTextView description, styleNo, order;
-    ArrayList<String> descriptions;
+    AutoCompleteTextView buyer, styleNo, order;
+    ArrayList<String> buyers;
     ArrayList<String> styleList;
     ArrayList<String> orderList;
     ArrayAdapter<String> adapter, adapter1, adapter2;
@@ -53,20 +53,19 @@ public class AddNewStyle extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_style);
 
-        description = (AutoCompleteTextView) findViewById(R.id.description);
         styleNo = (AutoCompleteTextView) findViewById(R.id.styleNo);
         order = (AutoCompleteTextView) findViewById(R.id.order);
-        buyer = findViewById(R.id.buyer);
+        buyer = (AutoCompleteTextView) findViewById(R.id.buyer);
         item = findViewById(R.id.item);
         quantity = findViewById(R.id.quantity);
         shipmentdate = findViewById(R.id.shipMentDate);
-        descriptions = new ArrayList<>();
+        buyers = new ArrayList<>();
         styleList = new ArrayList<>();
         orderList = new ArrayList<>();
 
         adapter = new ArrayAdapter<String>(AddNewStyle.this,
-                android.R.layout.simple_dropdown_item_1line, descriptions);
-        description.setAdapter(adapter);
+                android.R.layout.simple_dropdown_item_1line, buyers);
+        buyer.setAdapter(adapter);
 
         adapter1 = new ArrayAdapter<String>(AddNewStyle.this,
                 android.R.layout.simple_dropdown_item_1line, styleList);
@@ -98,26 +97,6 @@ public class AddNewStyle extends AppCompatActivity {
             }
         });
 
-        description.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!description.getText().toString().isEmpty() && description.getText().toString().length()>5){
-                    flag=flag+1;
-                    if(flag==1) {
-                        getPlanningData("Description", description.getText().toString());
-                    }
-                }
-            }
-        });
-
         styleNo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -130,25 +109,7 @@ public class AddNewStyle extends AppCompatActivity {
                 if(!styleNo.getText().toString().isEmpty() && styleNo.getText().toString().length()>5){
                     flag=flag+1;
                     if(flag==1) {
-                        getPlanningData("Style", styleNo.getText().toString());
-                    }
-                }
-            }
-        });
-
-        order.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!order.getText().toString().isEmpty() && order.getText().toString().length()>5){
-                    flag=flag+1;
-                    if(flag==1) {
-                        getPlanningData("Order_number", order.getText().toString());
+                        getPlanningData("Style_OB", styleNo.getText().toString());
                     }
                 }
             }
@@ -158,6 +119,7 @@ public class AddNewStyle extends AppCompatActivity {
     private void getPlanningData(String tag, String val) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = Endpoints.GET_STYLE_DETAILS+"?tag="+tag+"&val="+val;
+        url = url.replace(" ", "%20");
         Log.i("Url", url);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
@@ -167,11 +129,7 @@ public class AddNewStyle extends AppCompatActivity {
                         JSONObject jsonObject = response.getJSONObject(i);
                         styleNo.setText(jsonObject.getString("style"));
                         buyer.setText(jsonObject.getString("buyer"));
-                        item.setText(jsonObject.getString("item"));
-                        description.setText(jsonObject.getString("description"));
-                        order.setText(jsonObject.getString("orderNo"));
-                        shipmentdate.setText(jsonObject.getString("shipmentData"));
-                        quantity.setText(jsonObject.getString("plannedQuantity"));
+                        //order.setText(jsonObject.getString("orderNo"));
                         Log.i("PlanningData", jsonObject.toString());
                     }
                 } catch (JSONException e) {
@@ -192,15 +150,15 @@ public class AddNewStyle extends AppCompatActivity {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_ALL_STYLES, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.i("Description", response.toString());
+                Log.i("DescriptionData", response.toString());
                 for(int i=0; i<response.length(); i++){
                     try {
-                        descriptions.add(response.getJSONObject(i).getString("description"));
-                        styleList.add(response.getJSONObject(i).getString("style"));
-                        orderList.add(response.getJSONObject(i).getString("orderNo"));
+                        styleList.add(response.getJSONObject(i).getString("Style"));
+                        //orderList.add(response.getJSONObject(i).getString("Order_number"));
+                        //buyers.add(response.getJSONObject(i).getString("Buyer"));
                         adapter.notifyDataSetChanged();
-                        adapter1.notifyDataSetChanged();
-                        adapter2.notifyDataSetChanged();
+                        //adapter1.notifyDataSetChanged();
+                        //adapter2.notifyDataSetChanged();
                     } catch (JSONException e) {
                         Log.e("ArrayAssignErr", e.toString());
                     }
@@ -257,7 +215,7 @@ public class AddNewStyle extends AppCompatActivity {
                 params.put("plannedLine", lineNo);
                 params.put("buyer", buyer.getText().toString());
                 params.put("style", styleNo.getText().toString());
-                params.put("description", description.getText().toString());
+                params.put("description", "");
                 params.put("item", item.getText().toString());
                 params.put("orderNo", order.getText().toString());
                 params.put("shipmentDate", shipmentdate.getText().toString());

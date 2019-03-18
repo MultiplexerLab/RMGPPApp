@@ -14,6 +14,7 @@ import android.widget.Button;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
@@ -47,9 +48,8 @@ public class HourlyReportFragment extends Fragment {
 
     }
     ArrayList<String[]> tableData;
-    private static final String[] TABLE_HEADERS = { "Worker\nName" , "Worker\nId","Process\nName", "Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10", "Total"};
+    private static final String[] TABLE_HEADERS = { "Worker\nName" , "Worker\nId","Process\nName", "Total", "Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10", "Hour 11", "Hour 12", "Hour 13", "Hour 14", "Hour 15"};
     TableView tableView;
-    String prevId="";
     Button buttonRefreshHourlyReport;
     SimpleTableDataAdapter adapter;
     @Override
@@ -62,10 +62,10 @@ public class HourlyReportFragment extends Fragment {
 
         tableData = new ArrayList<>();
 
-        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(getActivity(), 15, 90);
-        columnModel1.setColumnWidth(0, 150);
+        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(getActivity(), 20, 90);
+        columnModel1.setColumnWidth(0, 120);
         columnModel1.setColumnWidth(1, 100);
-        columnModel1.setColumnWidth(2, 180);
+        columnModel1.setColumnWidth(2, 200);
         tableView.setColumnModel(columnModel1);
 
         adapter = new SimpleTableDataAdapter(getActivity(), tableData);
@@ -91,9 +91,10 @@ public class HourlyReportFragment extends Fragment {
         tableData.clear();
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
-        String tag = sharedPreferences.getString("description", "");
+        String tag = sharedPreferences.getString("styleNo", "");
+        String lineNo = sharedPreferences.getString("lineNo", "");
 
-        String getUrl = Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag;
+        String getUrl = Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag +"&lineNo="+lineNo;
         getUrl = getUrl.replace(" ", "%20");
         Log.i("getUrl", getUrl);
 
@@ -109,7 +110,7 @@ public class HourlyReportFragment extends Fragment {
                 String currentDate = df.format(new Date()).toString();
                 Log.i("processItems.size()", processItems.size()+"");
                 for(int i=0; i<processItems.size(); i++){
-                    final String arr[] = new String[14];
+                    final String arr[] = new String[19];
                     final String workerId = processItems.get(i).getAssignedWorkerId();
                     final int finalI = i;
                     JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_HOURLY_RECORD_DATA + "?workerId=" + workerId+"&entryTime="+currentDate, new Response.Listener<JSONArray>() {
@@ -128,43 +129,62 @@ public class HourlyReportFragment extends Fragment {
 
                                         String hour = jsonObject.getString("hour");
                                         if (hour.equals("Hour 1")) {
-                                            arr[3] = jsonObject.getString("quantity");
-                                            totalQuantity = totalQuantity+ Integer.parseInt(arr[3]);
-                                        } else if (hour.contains("Hour 2")) {
                                             arr[4] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[4]);
-                                        } else if (hour.contains("Hour 3")) {
+                                        } else if (hour.contains("Hour 2")) {
                                             arr[5] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[5]);
-                                        } else if (hour.contains("Hour 4")) {
+                                        } else if (hour.contains("Hour 3")) {
                                             arr[6] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[6]);
-                                        } else if (hour.contains("Hour 5")) {
+                                        } else if (hour.contains("Hour 4")) {
                                             arr[7] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[7]);
-                                        } else if (hour.contains("Hour 6")) {
+                                        } else if (hour.contains("Hour 5")) {
                                             arr[8] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[8]);
-                                        } else if (hour.contains("Hour 7")) {
+                                        } else if (hour.contains("Hour 6")) {
                                             arr[9] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[9]);
-                                        } else if (hour.contains("Hour 8")) {
+                                        } else if (hour.contains("Hour 7")) {
                                             arr[10] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[10]);
-                                        } else if (hour.contains("Hour 9")) {
-                                            Log.i("9th Hour", "Dhukse");
+                                        } else if (hour.contains("Hour 8")) {
                                             arr[11] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[11]);
-                                        } else if (hour.contains("Hour 10")) {
-                                            Log.i("10th Hour", "Dhukse");
+                                        } else if (hour.contains("Hour 9")) {
+                                            Log.i("9th Hour", "Dhukse");
                                             arr[12] = jsonObject.getString("quantity");
                                             totalQuantity = totalQuantity+ Integer.parseInt(arr[12]);
+                                        } else if (hour.contains("Hour 10")) {
+                                            Log.i("10th Hour", "Dhukse");
+                                            arr[13] = jsonObject.getString("quantity");
+                                            totalQuantity = totalQuantity+ Integer.parseInt(arr[13]);
+                                        }else if (hour.contains("Hour 11")) {
+                                            arr[14] = jsonObject.getString("quantity");
+                                            totalQuantity = totalQuantity+ Integer.parseInt(arr[14]);
+                                        } else if (hour.contains("Hour 12")) {
+                                            arr[15] = jsonObject.getString("quantity");
+                                            totalQuantity = totalQuantity+ Integer.parseInt(arr[15]);
+                                        } else if (hour.contains("Hour 13")) {
+                                            arr[16] = jsonObject.getString("quantity");
+                                            totalQuantity = totalQuantity+ Integer.parseInt(arr[16]);
+                                        } else if (hour.contains("Hour 14")) {
+                                            Log.i("9th Hour", "Dhukse");
+                                            arr[17] = jsonObject.getString("quantity");
+                                            totalQuantity = totalQuantity+ Integer.parseInt(arr[17]);
+                                        } else if (hour.contains("Hour 15")) {
+                                            Log.i("10th Hour", "Dhukse");
+                                            arr[18] = jsonObject.getString("quantity");
+                                            totalQuantity = totalQuantity+ Integer.parseInt(arr[18]);
                                         }
                                     } catch (JSONException e) {
                                         Log.e("JsonException", e.toString());
+                                    }catch (Exception e){
+                                        Log.e("ExceptionGeneral", e.toString());
                                     }
                                 }
-                                arr[13] = totalQuantity+"";
+                                arr[3] = totalQuantity+"";
                                 tableData.add(arr);
                                 setTableData();
                                 adapter.notifyDataSetChanged();
@@ -182,6 +202,22 @@ public class HourlyReportFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ErrorWorkerAssign", error.toString());
+            }
+        });
+        stringRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 1000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 1000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
             }
         });
         queue.add(stringRequest);

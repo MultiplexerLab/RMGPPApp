@@ -38,9 +38,11 @@ import java.util.Map;
 import ipa.rmgppapp.R;
 import ipa.rmgppapp.adapter.ViewPagerAdapter;
 import ipa.rmgppapp.fragment.FullDaySummeryFragment;
-import ipa.rmgppapp.fragment.IndividualEntryFragment;
+import ipa.rmgppapp.fragment.HourlyEntryFragment;
 import ipa.rmgppapp.fragment.HourlyReportFragment;
-import ipa.rmgppapp.fragment.LineEntryFragment;
+import ipa.rmgppapp.fragment.LineInputFragment;
+import ipa.rmgppapp.fragment.LineOutputFragment;
+import ipa.rmgppapp.fragment.StyleReportFragment;
 import ipa.rmgppapp.helper.DateTimeInstance;
 import ipa.rmgppapp.helper.Endpoints;
 
@@ -69,10 +71,12 @@ public class ProductionActivity extends AppCompatActivity {
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        adapter.addFragments(new IndividualEntryFragment(), "Individual Entry");
+        adapter.addFragments(new HourlyEntryFragment(), "Hourly Input");
         adapter.addFragments(new HourlyReportFragment(), "Hourly Report");
-        adapter.addFragments(new LineEntryFragment(), "Line\nEntry");
+        adapter.addFragments(new LineInputFragment(), "Line\nInput");
+        adapter.addFragments(new LineOutputFragment(), "Line\nOutput");
         adapter.addFragments(new FullDaySummeryFragment(), "Full Day Summery");
+        adapter.addFragments(new StyleReportFragment(), "Style Summery");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

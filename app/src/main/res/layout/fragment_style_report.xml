@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".fragment.StyleReportFragment">
 
     <Button
-        android:id="@+id/buttonRefreshHourlyReport"
+        android:id="@+id/buttonRefreshStyleSummery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Refresh"
@@ -16,10 +18,10 @@
         android:layout_height="wrap_content">
         <de.codecrafters.tableview.TableView
             xmlns:table="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/tableView"
-            android:layout_width="1900dp"
+            android:id="@+id/tableViewStyleReport"
+            android:layout_width="900dp"
             android:layout_height="wrap_content"
-            table:tableView_columnCount="14" />
+            table:tableView_columnCount="8" />
     </HorizontalScrollView>
 
 </LinearLayout>

@@ -3,25 +3,19 @@ package ipa.rmgppapp.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,20 +33,20 @@ import ipa.rmgppapp.model.ProcessItem;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class IndividualEntryFragment extends Fragment {
+public class HourlyEntryFragment extends Fragment {
 
     RecyclerView mRecyclerView;
     RequestQueue queue;
     Button refreshButton;
     String problemTypes[] = {"Choose a problem Type", "Input", "Maintenance", "Quality", "Production"};
 
-    public IndividualEntryFragment() {
+    public HourlyEntryFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View customView = inflater.inflate(R.layout.fragment_hourly_production, container, false);
+        View customView = inflater.inflate(R.layout.fragment_hourly_entry, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
@@ -74,7 +68,7 @@ public class IndividualEntryFragment extends Fragment {
         queue = Volley.newRequestQueue(getActivity());
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
         String lineNo = sharedPreferences.getString("lineNo", "");
-        String tag = sharedPreferences.getString("description", "");
+        String tag = sharedPreferences.getString("styleNo", "");
 
         String getUrl = Endpoints.GET_ASSIGNED_WORKER_URL + "?tag=" + tag+"&lineNo="+lineNo;
         getUrl = getUrl.replace(" ", "%20");

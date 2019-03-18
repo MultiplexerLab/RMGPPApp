@@ -71,11 +71,11 @@ public class WorkerAssignActivity extends AppCompatActivity {
 
     private void setData() {
         SharedPreferences sharedPreferences = getSharedPreferences("supervisor", MODE_PRIVATE);
-        String description = sharedPreferences.getString("description", "");
+        String tag = sharedPreferences.getString("styleNo", "");
         String lineNo = sharedPreferences.getString("lineNo", "");
-        Log.i("description", description);
+        Log.i("tagData", tag);
 
-        String getUrl = Endpoints.GET_OPERATION_DATA_URL + "?description=" + description+"&lineNo="+lineNo;
+        String getUrl = Endpoints.GET_OPERATION_DATA_URL + "?styleNo=" + tag+"&lineNo="+lineNo;
         getUrl = getUrl.replace(" ", "%20");
         Log.i("getUrl", getUrl);
 

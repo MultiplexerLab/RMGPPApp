@@ -34,7 +34,7 @@ import ipa.rmgppapp.model.PlanningData;
 
 public class StyleListActivity extends AppCompatActivity {
 
-    private static final String[] TABLE_HEADERS = {"SL No", "Buyer", "Style", "Description", "Item", "Order", "Quantity", "Ship Date"};
+    private static final String[] TABLE_HEADERS = {"SL No", "Buyer", "Style", "Item", "Order", "Quantity", "Ship Date"};
 
     RequestQueue queue;
     ArrayList<PlanningData> planningDataArrayList;
@@ -73,7 +73,7 @@ public class StyleListActivity extends AppCompatActivity {
 
                     for (int i = 0; i < planningDataArrayList.size(); i++) {
                         PlanningData obj = planningDataArrayList.get(i);
-                        tableData.add(i, new String[]{(i + 1) + "", obj.getBuyer(), obj.getStyle(), obj.getDescription(), obj.getItem(), obj.getOrderNo(), obj.getPlannedQuantity(), obj.getShipmentData()});
+                        tableData.add(i, new String[]{(i + 1) + "", obj.getBuyer(), obj.getStyle(), obj.getItem(), obj.getOrderNo(), obj.getPlannedQuantity(), obj.getShipmentData()});
                     }
                     setTableData();
                 } catch (Exception e) {
@@ -92,13 +92,12 @@ public class StyleListActivity extends AppCompatActivity {
 
     public void setTableData() {
         tableView = findViewById(R.id.tableViewReport);
-        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(this, 8, 100);
+        TableColumnDpWidthModel columnModel1 = new TableColumnDpWidthModel(this, 7, 100);
         columnModel1.setColumnWidth(0, 60);
-        columnModel1.setColumnWidth(2, 140);
-        columnModel1.setColumnWidth(3, 140);
-        columnModel1.setColumnWidth(4, 140);
+        columnModel1.setColumnWidth(2, 120);
         columnModel1.setColumnWidth(4, 150);
-        columnModel1.setColumnWidth(7, 150);
+        columnModel1.setColumnWidth(3, 120);
+        columnModel1.setColumnWidth(6, 120);
 
         tableView.setColumnModel(columnModel1);
 
@@ -109,16 +108,14 @@ public class StyleListActivity extends AppCompatActivity {
         tableView.addDataClickListener(new TableDataClickListener() {
             @Override
             public void onDataClicked(int rowIndex, Object clickedData) {
-                String description = planningDataArrayList.get(rowIndex).getDescription();
-                String temp[] = description.split(" ");
-                Log.i("descriptionTag", description);
+                String styleNo = planningDataArrayList.get(rowIndex).getStyle();
+                Log.i("styleNo", styleNo);
 
                 SharedPreferences.Editor editor = getSharedPreferences("supervisor", MODE_PRIVATE).edit();
-                editor.putString("description", description);
                 editor.putString("styleNo", planningDataArrayList.get(rowIndex).getStyle());
                 editor.commit();
 
-                if (description.isEmpty()) {
+                if (styleNo.isEmpty()) {
                     Toast.makeText(StyleListActivity.this, "You have to choose a style!", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(StyleListActivity.this, ProductionActivity.class);

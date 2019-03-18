@@ -1,20 +1,24 @@
 package ipa.rmgppapp.model;
 
 public class LineEntry {
-
     private String hour;
+    private String buyer;
+    private String styleNo;
+    private String orderNumber;
+    private String color;
     private String lineInput;
     private String lineOutput;
     private String problemType;
     private String problem;
     private String status;
-    private String styleNo;
     private String entryTime;
     private String timeStamp;
 
-    public LineEntry(String hour, String lineInput, String lineOutput, String problemType, String problem, String status, String styleNo, String entryTime, String timeStamp) {
+    public LineEntry(String buyer, String styleNo, String orderNumber, String color, String hour, String lineOutput, String problemType, String problem, String status, String entryTime, String timeStamp) {
         this.hour = hour;
-        this.lineInput = lineInput;
+        this.buyer = buyer;
+        this.orderNumber = orderNumber;
+        this.color = color;
         this.lineOutput = lineOutput;
         this.problemType = problemType;
         this.status = status;
@@ -22,6 +26,41 @@ public class LineEntry {
         this.entryTime = entryTime;
         this.problem = problem;
         this.timeStamp = timeStamp;
+    }
+
+    public LineEntry(String buyer, String styleNo, String orderNumber, String color, String hour, String lineInput, String entryTime, String timeStamp) {
+        this.buyer = buyer;
+        this.orderNumber = orderNumber;
+        this.color = color;
+        this.hour = hour;
+        this.styleNo = styleNo;
+        this.lineInput = lineInput;
+        this.entryTime = entryTime;
+        this.timeStamp = timeStamp;
+    }
+
+    public String getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(String buyer) {
+        this.buyer = buyer;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getTimeStamp() {

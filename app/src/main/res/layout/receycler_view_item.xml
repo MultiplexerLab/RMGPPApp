@@ -29,7 +29,7 @@
     <TextView
         android:id="@+id/workerId"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:hint="Worker ID"
         android:padding="5dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
@@ -37,7 +37,7 @@
     <TextView
         android:id="@+id/workerName"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:hint="Worker Name"
         android:padding="5dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
@@ -45,7 +45,7 @@
     <TextView
         android:id="@+id/processName"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:hint="Process Name"
         android:padding="5dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
@@ -53,7 +53,7 @@
     <TextView
         android:id="@+id/hourlyTarget"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:hint="Hourly Target"
         android:padding="5dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
@@ -92,6 +92,11 @@
         android:layout_height="30dp"
         android:hint="Problem"></Spinner>
 
+    <EditText
+        android:id="@+id/note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Set a note"/>
     <Button
         android:id="@+id/saveIndividualEntry"
         android:layout_width="wrap_content"

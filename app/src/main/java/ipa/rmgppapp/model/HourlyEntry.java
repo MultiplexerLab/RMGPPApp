@@ -5,23 +5,35 @@ public class HourlyEntry {
     private String workerId;
     private String workerName;
     private String processName;
+    private String hourlyTarget;
     private String problemType;
     private String problem;
     private int quantity;
     private String entryTime;
     private String timeStamp;
+    private String note;
 
-    public HourlyEntry(String hour, String workerId, String workerName, String processName, int quantity, String entryTime, String problemType, String problem,
-                       String timeStamp) {
+    public HourlyEntry(String hour, String workerId, String workerName, String processName, String hourlyTarget, int quantity, String entryTime, String problemType, String problem,
+                       String timeStamp, String note) {
         this.hour = hour;
         this.workerId = workerId;
         this.workerName = workerName;
         this.processName = processName;
+        this.hourlyTarget = hourlyTarget;
         this.quantity = quantity;
         this.entryTime = entryTime;
         this.problemType = problemType;
         this.problem = problem;
         this.timeStamp = timeStamp;
+        this.note = note;
+    }
+
+    public String getHourlyTarget() {
+        return hourlyTarget;
+    }
+
+    public void setHourlyTarget(String hourlyTarget) {
+        this.hourlyTarget = hourlyTarget;
     }
 
     public String getHour() {
@@ -94,5 +106,13 @@ public class HourlyEntry {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

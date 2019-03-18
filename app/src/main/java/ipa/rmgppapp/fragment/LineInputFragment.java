@@ -1,11 +1,12 @@
 package ipa.rmgppapp.fragment;
 
-import android.app.VoiceInteractor;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,45 +41,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ipa.rmgppapp.R;
-import ipa.rmgppapp.activity.StyleListActivity;
 import ipa.rmgppapp.helper.DateTimeInstance;
 import ipa.rmgppapp.helper.Endpoints;
-import ipa.rmgppapp.model.HourlyEntry;
 import ipa.rmgppapp.model.LineEntry;
-import ipa.rmgppapp.model.PlanningData;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class LineEntryFragment extends Fragment {
+public class LineInputFragment extends Fragment {
 
     ArrayList<String> problems, statusList;
-    String times[] = {"Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10"};
+    String[] times = {"Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5", "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10" , "Hour 11", "Hour 12", "Hour 13", "Hour 14", "Hour 15"};
     Button saveHourlyEntry;
-    EditText hourlyLineTarget, editTextInput, editTextOutput;
-    Spinner problemTypeSpinner, problemsSpinner, statusSpinner;
-    String problemTypes[] = {"Choose a problem Type", "Input", "Maintenance", "Quality", "Production"};
+    EditText editTextInput, editTextBuyer, editTextStyle, editTextPO, editTextColor;
     ArrayAdapter<String> adapter;
-    boolean flag = false;
     ListView listViewLineData;
     ArrayList<String> arrayListLineData;
     ArrayAdapter<String> adapterLineData;
     ArrayList<String> idList;
+    int flag1 = 0;
 
-    public LineEntryFragment(){
+    public LineInputFragment(){
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View customView = inflater.inflate(R.layout.fragment_input_output, container, false);
+        View customView = inflater.inflate(R.layout.fragment_line_input, container, false);
         final Spinner spinnerTime = customView.findViewById(R.id.spinnerTime);
         spinnerTime.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, times));
         editTextInput = customView.findViewById(R.id.editTextInput);
-        editTextOutput = customView.findViewById(R.id.editTextOutput);
-        problemTypeSpinner = customView.findViewById(R.id.problemTypeSpinner);
-        problemsSpinner = customView.findViewById(R.id.problemsSpinner);
-        statusSpinner = customView.findViewById(R.id.spinnerStatus);
+        editTextBuyer = customView.findViewById(R.id.editTextBuyer);
+        editTextStyle = customView.findViewById(R.id.editTextStyle);
+        editTextPO = customView.findViewById(R.id.editTextInputPurchaseOrderNo);
+        editTextColor = customView.findViewById(R.id.editTextInputColor);
+        editTextInput = customView.findViewById(R.id.editTextInput);
+        //problemTypeSpinner = customView.findViewById(R.id.problemTypeSpinner);
+        //problemsSpinner = customView.findViewById(R.id.problemsSpinner);
         saveHourlyEntry = customView.findViewById(R.id.saveHourlyEntry);
-        hourlyLineTarget = customView.findViewById(R.id.hourlyLineTarget);
         listViewLineData = customView.findViewById(R.id.listViewLineData);
 
         arrayListLineData = new ArrayList<>();
@@ -93,52 +91,21 @@ public class LineEntryFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("supervisor", MODE_PRIVATE);
         final String styleNo = sharedPreferences.getString("styleNo", "");
 
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String currentDate = df.format(new Date()).toString();
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String getUrl = Endpoints.CHECK_LINE_TARGET_URL+"?styleNo="+styleNo+"&entryTime="+currentDate;
-        getUrl = getUrl.replace(" ", "%20");
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {
+        editTextStyle.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onResponse(JSONArray response) {
-                Log.i("responseLineData", response.toString());
-                try {
-                    JSONObject jsonObject = response.getJSONObject(0);
-                    hourlyLineTarget.setText(jsonObject.getString("lineTarget"));
-                } catch (JSONException e) {
-                    Log.e("JSONLineDataErr", e.toString());
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!editTextStyle.getText().toString().isEmpty() && editTextStyle.getText().toString().length()>5){
+                    flag1=flag1+1;
+                    if(flag1==1) {
+                        getBuyerData("Style_OB", editTextStyle.getText().toString());
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("LineDataErr", error.toString());
-            }
-        });
-        queue.add(jsonArrayRequest);
-        spinnerTime.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, times));
-        problems = new ArrayList<>();
-        problems.add("Choose a Problem");
-
-        problemTypeSpinner.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, problemTypes));
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, problems);
-        problemsSpinner.setAdapter(adapter);
-
-        ArrayAdapter adapterStatus = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, statusList);
-        statusList.add("Choose a status");
-        statusList.add("Resolved");
-        statusList.add("Not Resolved");
-        statusSpinner.setAdapter(adapterStatus);
-
-        problemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                flag = true;
-                getProblemData(problemTypes[position]);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -147,47 +114,19 @@ public class LineEntryFragment extends Fragment {
             public void onClick(View view) {
                 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 String requiredDate = df.format(new Date()).toString();
-                String problemType = "", problem = "", status = "";
-
-                if(flag){
-                    if(!problemTypeSpinner.getSelectedItem().toString().contains("Choose")) {
-                        problemType = problemTypeSpinner.getSelectedItem().toString();
-                        problem = problemsSpinner.getSelectedItem().toString();
-                    }
-                }
-                if(!statusSpinner.getSelectedItem().toString().contains("Choose")) {
-                    status = statusSpinner.getSelectedItem().toString();
-                }
-                if(editTextOutput.getText().toString().isEmpty()){
-                    Toast.makeText(getActivity(), "Please insert any output value", Toast.LENGTH_SHORT).show();
-                }else{
-                    LineEntry lineEntry = new LineEntry(spinnerTime.getSelectedItem().toString(), editTextInput.getText().toString(),
-                            editTextOutput.getText().toString(), problemType, problem, status,
-                            styleNo, requiredDate, DateTimeInstance.getTimeStamp());
+                
+                if(editTextBuyer.getText().toString().isEmpty()){
+                    Toast.makeText(getActivity(), "বায়ার সেট করুন", Toast.LENGTH_SHORT).show();
+                }else if(editTextStyle.getText().toString().isEmpty()){
+                    Toast.makeText(getActivity(), "স্টাইল সেট করুন", Toast.LENGTH_SHORT).show();
+                }else if(editTextInput.getText().toString().isEmpty()){
+                    Toast.makeText(getActivity(), "ইনপুট সেট করুন", Toast.LENGTH_SHORT).show();
+                }else {
+                    LineEntry lineEntry = new LineEntry(editTextBuyer.getText().toString(), editTextStyle.getText().toString(),
+                            editTextPO.getText().toString(), editTextColor.getText().toString(), spinnerTime.getSelectedItem().toString(),
+                            editTextInput.getText().toString(), requiredDate, DateTimeInstance.getTimeStamp());
                     saveLineEntry(lineEntry);
                 }
-            }
-        });
-
-        listViewLineData.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setTitle("Resolved?").setCancelable(false).setMessage("Is the problem resolved now?");
-                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        updateStatus(position);
-                    }
-                });
-                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                dialog.show();
-                return true;
             }
         });
 
@@ -214,6 +153,33 @@ public class LineEntryFragment extends Fragment {
         return customView;
     }
 
+    private void getBuyerData(String tag, String val) {
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = Endpoints.GET_STYLE_DETAILS+"?tag="+tag+"&val="+val;
+        url = url.replace(" ", "%20");
+        Log.i("Url", url);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for(int i=0; i<response.length();i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        editTextBuyer.setText(jsonObject.getString("buyer"));
+                        //editTextPO.setText(jsonObject.getString("orderNo"));
+                        Log.i("PlanningData", jsonObject.toString());
+                    }
+                } catch (JSONException e) {
+                    Log.e("JSONExceptionErr", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("PlanningError", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
+    }
     private void deleteLineData(String id) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = Endpoints.DELETE_LINE_DATA_URL+"?id="+id;
@@ -239,68 +205,16 @@ public class LineEntryFragment extends Fragment {
         queue.add(stringRequest);
     }
 
-    private void updateStatus(int position) {
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String updateUrl = Endpoints.UPDATE_LINE_DATA_STATUS+"?id="+idList.get(position);
-        updateUrl = updateUrl.replace(" ", "%20");
-        Log.i("updateUrl", updateUrl);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, updateUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("responseUpdateLineData", response.toString());
-                        if(response.contains("DONE")){
-                            getLineData();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        queue.add(stringRequest);
-    }
-
-    public void getProblemData(String problemType) {
-        problems.clear();
-        problems.add("Choose a Problem");
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String getUrl = Endpoints.GET_PROBLEM_DATA_URL + "?problemType=" + problemType;
-        getUrl = getUrl.replace(" ", "%20");
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getUrl, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        String problem = response.getJSONObject(i).getString("Problem");
-                        problems.add(problem);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                adapter.notifyDataSetChanged();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        queue.add(jsonArrayRequest);
-    }
-
     private void saveLineEntry(final LineEntry obj) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.POST_LINE_DATA_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.i("Response", response.toString());
                 if(response.contains("SUCCESS")){
-                    Log.i("Response", response.toString());
                     Toast.makeText(getContext(), "ডাটা সেভ হয়েছে!", Toast.LENGTH_SHORT).show();
-                    problemTypeSpinner.setSelection(0);
-                    problemsSpinner.setSelection(0);
+                    //problemTypeSpinner.setSelection(0);
+                    //problemsSpinner.setSelection(0);
                     getLineData();
                     removeViews();
                 }else{
@@ -335,7 +249,7 @@ public class LineEntryFragment extends Fragment {
                 params.put("jsonString", jsonString);
                 params.put("supervisor", supervisor);
                 params.put("lineNo", lineNo);
-                params.put("uniqueKey", supervisor+styleNo+currentDate+obj.getHour());
+                params.put("uniqueKey", "in"+supervisor+styleNo+obj.getOrderNumber()+obj.getColor()+obj.getHour()+currentDate);
                 Log.i("jsonString", params.toString());
                 return params;
             }
@@ -345,10 +259,10 @@ public class LineEntryFragment extends Fragment {
 
     private void removeViews() {
         editTextInput.setText("");
-        editTextOutput.setText("");
-        problemTypeSpinner.setSelection(0);
-        problemsSpinner.setSelection(0);
-        statusSpinner.setSelection(0);
+        /*editTextColor.setText("");
+        editTextBuyer.setText("");
+        editTextPO.setText("");
+        editTextStyle.setText("");*/
     }
 
     public void getLineData(){
@@ -370,26 +284,24 @@ public class LineEntryFragment extends Fragment {
                 Log.i("responseLineData", response.toString());
                 for(int i=0; i<response.length(); i++){
                     try {
-                        if(!response.getJSONObject(i).getString("problem").isEmpty()){
+                        if(response.getJSONObject(i).getString("input").length()>0) {
                             idList.add(response.getJSONObject(i).getString("id"));
-                            String data = response.getJSONObject(i).getString("hour")+
-                                    ", Output: "+response.getJSONObject(i).getString("output")+
-                                    /*"\nProblem Type: "+response.getJSONObject(i).getString("problemType")+*/
-                                    ", Prob: "+response.getJSONObject(i).getString("problem")+
-                                    "\nStatus: "+response.getJSONObject(i).getString("status");
+                            String data = response.getJSONObject(i).getString("hour") +
+                                    ", Input quantity: " + response.getJSONObject(i).getString("input") +
+                                    "\nOrder Number: " + response.getJSONObject(i).getString("orderNo") +
+                                    "\nInput color: " + response.getJSONObject(i).getString("color");
                             arrayListLineData.add(data);
                             adapterLineData.notifyDataSetChanged();
                         }
-
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e("LineInputException", e.toString());
                     }
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e("LineInputVolley", error.toString());
             }
         });
         queue.add(jsonArrayRequest);
