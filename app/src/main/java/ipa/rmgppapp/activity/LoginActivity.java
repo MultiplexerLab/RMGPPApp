@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         eTSuperVisorId = findViewById(R.id.editTextSuperVisorId);
-        spinnerLine = (Spinner) findViewById(R.id.spinnerLine);
+        spinnerLine = (Spinner) findViewById(R.id.spinnerLine1);
         spinnerSection = (Spinner) findViewById(R.id.spinnerSection);
         rootLayout = findViewById(R.id.rootLayout);
 
@@ -64,24 +64,6 @@ public class LoginActivity extends AppCompatActivity {
 
         if (internetConnected()) {
             getSpinnerData(eTSuperVisorId.getText().toString());
-            /*eTSuperVisorId.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if(!eTSuperVisorId.getText().toString().isEmpty() && eTSuperVisorId.getText().toString().length()>2){
-                        getSpinnerData(eTSuperVisorId.getText().toString());
-                    }
-                }
-            });*/
             if (snackbar != null) {
                 if (snackbar.isShown()) {
                     snackbar.dismiss();
