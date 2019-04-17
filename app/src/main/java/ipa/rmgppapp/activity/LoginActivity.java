@@ -54,8 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         eTSuperVisorId = findViewById(R.id.editTextSuperVisorId);
-        spinnerLine = findViewById(R.id.spinnerLine);
-        spinnerSection = findViewById(R.id.spinnerSection);
+        spinnerLine = (Spinner) findViewById(R.id.spinnerLine);
+        spinnerSection = (Spinner) findViewById(R.id.spinnerSection);
         rootLayout = findViewById(R.id.rootLayout);
 
         lineData = new ArrayList<>();
