@@ -116,14 +116,16 @@ public class LoginActivity extends AppCompatActivity {
         if(id == R.id.buttonContinue) {
             boolean error = false;
             String supervisorId = eTSuperVisorId.getText().toString();
-            String lineNo = spinnerLine.getSelectedItem().toString();
+            String lineNo = "";
 
             if (supervisorId.isEmpty()) {
                 eTSuperVisorId.setError("Supervisor Id is missing!");
                 error = true;
             }
-            if (lineNo.equals("Choose a Line")) {
+            if (spinnerLine.getSelectedItem().toString().isEmpty()) {
                 error = true;
+            }else{
+                lineNo = spinnerLine.getSelectedItem().toString();
             }
 
             if (error) {
