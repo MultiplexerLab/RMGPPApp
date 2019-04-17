@@ -165,7 +165,7 @@ public class LineOutputFragment extends Fragment {
                 }
                 if (editTextOutput.getText().toString().isEmpty()) {
                     Toast.makeText(getActivity(), "আউটপুট সেট করুন", Toast.LENGTH_SHORT).show();
-                } if(editTextBuyer.getText().toString().isEmpty()){
+                }else if(editTextBuyer.getText().toString().isEmpty()){
                     Toast.makeText(getActivity(), "বায়ার সেট করুন", Toast.LENGTH_SHORT).show();
                 }else if(editTextStyle.getText().toString().isEmpty()){
                     Toast.makeText(getActivity(), "স্টাইল সেট করুন", Toast.LENGTH_SHORT).show();
