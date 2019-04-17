@@ -127,23 +127,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void continueProcess(View view) {
-        boolean error = false;
-        String supervisorId = eTSuperVisorId.getText().toString();
-        String lineNo = spinnerLine.getSelectedItem().toString();
+        int id = view.getId();
 
-        if (supervisorId.isEmpty()) {
-            eTSuperVisorId.setError("Supervisor Id is missing!");
-            error = true;
-        }
-        if (lineNo.equals("Choose a Line")) {
-            error = true;
-        }
+        if(id == R.id.buttonContinue) {
+            boolean error = false;
+            String supervisorId = eTSuperVisorId.getText().toString();
+            String lineNo = spinnerLine.getSelectedItem().toString();
 
-        if (error) {
-            Toast.makeText(this, "Insert all valid information", Toast.LENGTH_LONG).show();
-        } else {
-            if (internetConnected()) {
-                checkValidSupervisor(supervisorId, lineNo);
+            if (supervisorId.isEmpty()) {
+                eTSuperVisorId.setError("Supervisor Id is missing!");
+                error = true;
+            }
+            if (lineNo.equals("Choose a Line")) {
+                error = true;
+            }
+
+            if (error) {
+                Toast.makeText(this, "Insert all valid information", Toast.LENGTH_LONG).show();
+            } else {
+                if (internetConnected()) {
+                    checkValidSupervisor(supervisorId, lineNo);
+                }
             }
         }
     }

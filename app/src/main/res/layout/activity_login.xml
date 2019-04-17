@@ -84,6 +84,7 @@
                 android:textColor="@color/textColor" />
 
             <Button
+                android:id="@+id/buttonContinue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
