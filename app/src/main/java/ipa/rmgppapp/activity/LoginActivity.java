@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
 
         if (internetConnected()) {
-            getSpinnerData(eTSuperVisorId.getText().toString());
+            getSpinnerData();
             if (snackbar != null) {
                 if (snackbar.isShown()) {
                     snackbar.dismiss();
@@ -78,9 +78,9 @@ public class LoginActivity extends AppCompatActivity {
         spinnerSection.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, sectionArr));
     }
 
-    private void getSpinnerData(String superVisorId) {
+    private void getSpinnerData() {
         lineData.clear();
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PLANNED_LINE_URL+"?superVisorId="+superVisorId,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_PLANNED_LINE_URL,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                                 lineData.add(jsonArray.getJSONObject(i).getString("line"));
                             } catch (JSONException e) {
                                 Log.e("LineDataErr", e.toString());
+                                Toast.makeText(LoginActivity.this, "Server problem! Please Refresh again", Toast.LENGTH_SHORT).show();
                             }
                             adapter.notifyDataSetChanged();
                         }
@@ -98,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("PlannedLineVolley", error.toString());
+                Toast.makeText(LoginActivity.this, "Server problem! Please Refresh again", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -205,7 +207,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 9003) {
             if (internetConnected()) {
-                getSpinnerData(eTSuperVisorId.getText().toString());
+                getSpinnerData();
             } else {
                 showSnackBar();
             }
@@ -213,6 +215,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void refreshLines(View view) {
-        getSpinnerData(eTSuperVisorId.getText().toString());
+        getSpinnerData();
     }
 }
